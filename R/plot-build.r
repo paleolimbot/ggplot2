@@ -31,6 +31,8 @@ ggplot_build.ggplot <- function(plot) {
     plot <- plot + geom_blank()
   }
 
+  lapply(plot$layers, function(l) l$build_init(plot, NULL))
+
   layers <- plot$layers
   layer_data <- lapply(layers, function(y) y$layer_data(plot$data))
 
@@ -52,6 +54,7 @@ ggplot_build.ggplot <- function(plot) {
   # Initialise panels, add extra data for margins & missing faceting
   # variables, and add on a PANEL variable to data
   layout <- create_layout(plot$facet, plot$coordinates)
+  lapply(plot$layers, function(l) l$build_init(plot, layout))
   data <- layout$setup(data, plot$data, plot$plot_env)
 
   # Compute aesthetics to produce data with generalised variable names

@@ -173,6 +173,35 @@ Layer <- ggproto("Layer", NULL,
   mapping = NULL,
   position = NULL,
   inherit.aes = FALSE,
+  plot = NULL,
+  layout = NULL,
+
+  build_init = function(self, plot, layout) {
+    self$plot <- plot
+    self$layout <- layout
+    self$geom$layer <- self
+    self$stat$layer <- self
+    self$position$layer <- self
+    NULL
+  },
+
+  get_scale = function(self, scale, panel = NA) {
+    if(is.null(self$plot) || is.null(self$layout)) stop("Layer$build_init() has not been called yet")
+    if(is_position_aes(scale)) {
+      # depends on panel
+      if(identical(panel, NA)) stop("Position aesthetic depends on panel")
+      if(grepl("x", scale)) {
+        self$layout$panel_scales_x[[panel]]
+      } else if(grepl("y", scale)) {
+        self$layout$panel_scales_y[[panel]]
+      } else {
+        stop("Unknown position aesthetic: ", scale)
+      }
+    } else {
+      self$plot$scales$get_scales(scale)
+    }
+
+  },
 
   print = function(self) {
     if (!is.null(self$mapping)) {
