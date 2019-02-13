@@ -6,14 +6,17 @@
 # This includes managing the parameters for the facet and the coord
 # so that we don't modify the ggproto object in place.
 
-create_layout <- function(facet = FacetNull, coord = CoordCartesian) {
-  ggproto(NULL, Layout, facet = facet, coord = coord)
+create_layout <- function(facet = FacetNull, coord = CoordCartesian, scales = NULL) {
+  ggproto(NULL, Layout, facet = facet, coord = coord, scales = scales)
 }
 #' @rdname ggplot2-ggproto
 #' @format NULL
 #' @usage NULL
 #' @export
 Layout <- ggproto("Layout", NULL,
+  # The original scales list
+  sccales = NULL,
+
   # The coordinate system and its parameters
   coord = NULL,
   coord_params = list(),
@@ -52,6 +55,22 @@ Layout <- ggproto("Layout", NULL,
       layout = self$layout,
       params = self$facet_params
     )
+  },
+
+  get_scale = function(self, scale, panel = NA) {
+    if(is_position_aes(scale)) {
+      # depends on panel
+      if(identical(panel, NA)) stop("Position aesthetic depends on panel")
+      if(grepl("x", scale)) {
+        self$panel_scales_x[[panel]]
+      } else if(grepl("y", scale)) {
+        self$panel_scales_y[[panel]]
+      } else {
+        stop("Unknown position aesthetic: ", scale)
+      }
+    } else {
+      self$scales$get_scales(scale)
+    }
   },
 
   # Assemble the facet fg & bg, the coord fg & bg, and the layers
