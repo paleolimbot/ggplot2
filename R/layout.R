@@ -57,16 +57,16 @@ Layout <- ggproto("Layout", NULL,
     )
   },
 
-  get_scale = function(self, scale, panel = NA) {
-    if(is_position_aes(scale)) {
+  get_scale = function(self, scale, panel = NA, layer = NA) {
+    if(scale %in% c("x", "y")) {
       # depends on panel
       if(identical(panel, NA)) stop("Position aesthetic depends on panel")
-      if(grepl("x", scale)) {
+      if(scale == "x") {
         self$panel_scales_x[[panel]]
-      } else if(grepl("y", scale)) {
+      } else if(scale == "y") {
         self$panel_scales_y[[panel]]
       } else {
-        stop("Unknown position aesthetic: ", scale)
+        stop("Unknown position scale: ", scale)
       }
     } else {
       self$scales$get_scales(scale)
