@@ -4,10 +4,11 @@ strip_layout <- function(p) {
   data <- ggplot_build(p)
   plot <- data$plot
   layout <- data$layout
+  layer_params <- data$layer_params
   data <- data$data
   theme <- plot_theme(plot)
 
-  geom_grobs <- Map(function(l, d) l$draw_geom(d, layout), plot$layers, data)
+  geom_grobs <- Map(function(i, d) plot$layers[[i]]$draw_geom(d, layout, layer_params[[i]]), seq_along(plot$layers), data)
 
   facet <- layout$render(geom_grobs, data, theme, plot$labels)
   layout <- facet$layout

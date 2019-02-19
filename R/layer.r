@@ -205,6 +205,33 @@ Layer <- ggproto("Layer", NULL,
     data
   },
 
+  # hook to generate the layer_params object that gets passed to
+  # draw_geom()
+  setup_layer_params = function(self, index, scales, layout) {
+    force(index)
+    force(scales)
+    force(layout)
+
+    list(
+      index = index,
+      get_scale = function(scale, panel = NA) {
+        if(scale %in% c("x", "y")) {
+          # depends on panel
+          if(identical(panel, NA)) stop("Position scale depends on panel")
+          if(scale == "x") {
+            layout$panel_scales_x[[panel]]
+          } else if(scale == "y") {
+            layout$panel_scales_y[[panel]]
+          } else {
+            stop("Unknown position scale: ", scale)
+          }
+        } else {
+          scales$get_scales(scale)
+        }
+      }
+    )
+  },
+
   compute_aesthetics = function(self, data, plot) {
     # For annotation geoms, it is useful to be able to ignore the default aes
     if (self$inherit.aes) {
@@ -325,14 +352,14 @@ Layer <- ggproto("Layer", NULL,
     self$stat$finish_layer(data, self$stat_params)
   },
 
-  draw_geom = function(self, data, layout) {
+  draw_geom = function(self, data, layout, layer_params) {
     if (empty(data)) {
       n <- nrow(layout$layout)
       return(rep(list(zeroGrob()), n))
     }
 
     data <- self$geom$handle_na(data, self$geom_params)
-    self$geom$draw_layer(data, self$geom_params, layout, layout$coord)
+    self$geom$draw_layer(data, self$geom_params, layout, layout$coord, layer_params)
   }
 )
 

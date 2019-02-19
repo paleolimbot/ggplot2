@@ -105,8 +105,11 @@ ggplot_build.ggplot <- function(plot) {
   # Let Layout modify data before rendering
   data <- layout$finish_data(data)
 
+  # generate layer_params
+  layer_params <- lapply(seq_along(layers), function(i) layers[[i]]$setup_layer_params(i, scales, layout))
+
   structure(
-    list(data = data, layout = layout, plot = plot),
+    list(data = data, layout = layout, plot = plot, layer_params = layer_params),
     class = "ggplot_built"
   )
 }
@@ -136,7 +139,7 @@ layer_scales <- function(plot, i = 1L, j = 1L) {
 layer_grob <- function(plot, i = 1L) {
   b <- ggplot_build(plot)
 
-  b$plot$layers[[i]]$draw_geom(b$data[[i]], b$layout)
+  b$plot$layers[[i]]$draw_geom(b$data[[i]], b$layout, b$layer_params[[i]])
 }
 
 #' Build a plot with all the usual bits and pieces.
@@ -162,10 +165,11 @@ ggplot_gtable <- function(data) {
 ggplot_gtable.ggplot_built <- function(data) {
   plot <- data$plot
   layout <- data$layout
+  layer_params <- data$layer_params
   data <- data$data
   theme <- plot_theme(plot)
 
-  geom_grobs <- Map(function(l, d) l$draw_geom(d, layout), plot$layers, data)
+  geom_grobs <- Map(function(i, d) plot$layers[[i]]$draw_geom(d, layout, layer_params[[i]]), seq_along(plot$layers), data)
   plot_table <- layout$render(geom_grobs, data, theme, plot$labels)
 
   # Legends
