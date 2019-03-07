@@ -70,6 +70,7 @@ Stat <- ggproto("Stat",
   },
 
   compute_layer = function(self, data, params, layout) {
+    layer_params <- attr(data, "layer_params")
     check_required_aesthetics(
       self$required_aes,
       c(names(data), names(params)),
@@ -88,6 +89,7 @@ Stat <- ggproto("Stat",
     args <- c(list(data = quote(data), scales = quote(scales)), params)
     dapply(data, "PANEL", function(data) {
       scales <- layout$get_scales(data$PANEL[1])
+      data <- lp_data(data, layer_params)
       tryCatch(do.call(self$compute_panel, args), error = function(e) {
         warning("Computation failed in `", snake_class(self), "()`:\n",
           e$message, call. = FALSE)
@@ -98,9 +100,11 @@ Stat <- ggproto("Stat",
 
   compute_panel = function(self, data, scales, ...) {
     if (empty(data)) return(new_data_frame())
+    layer_params <- attr(data, "layer_params")
 
     groups <- split(data, data$group)
     stats <- lapply(groups, function(group) {
+      group <- lp_data(group, layer_params)
       self$compute_group(data = group, scales = scales, ...)
     })
 

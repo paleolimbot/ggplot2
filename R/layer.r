@@ -173,6 +173,7 @@ Layer <- ggproto("Layer", NULL,
   mapping = NULL,
   position = NULL,
   inherit.aes = FALSE,
+  layer_params = NULL,
 
   print = function(self) {
     if (!is.null(self$mapping)) {
@@ -202,6 +203,16 @@ Layer <- ggproto("Layer", NULL,
   # hook to allow a layer access to the final layer data
   # in input form and to global plot info
   setup_layer = function(self, data, plot) {
+
+    # generate the layer_params object that gets attached to the layer data when it
+    # gets passed to the stat, position, or geom functions
+    self$layer_params <- ggproto("LayerParams", NULL,
+      hello = function(self) {
+        "hi! I'm the layer params!"
+      }
+    )
+
+    # return the data
     data
   },
 
@@ -256,9 +267,9 @@ Layer <- ggproto("Layer", NULL,
     if (empty(data))
       return(new_data_frame())
 
-    params <- self$stat$setup_params(data, self$stat_params)
-    data <- self$stat$setup_data(data, params)
-    self$stat$compute_layer(data, params, layout)
+    params <- self$stat$setup_params(lp_data(data, self$layer_params), self$stat_params)
+    data <- self$stat$setup_data(lp_data(data, self$layer_params), params)
+    self$stat$compute_layer(lp_data(data, self$layer_params), params, layout)
   },
 
   map_statistic = function(self, data, plot) {
@@ -302,27 +313,27 @@ Layer <- ggproto("Layer", NULL,
       snake_class(self$geom)
     )
 
-    self$geom$setup_data(data, c(self$geom_params, self$aes_params))
+    self$geom$setup_data(lp_data(data, self$layer_params), c(self$geom_params, self$aes_params))
   },
 
   compute_position = function(self, data, layout) {
     if (empty(data)) return(new_data_frame())
 
-    params <- self$position$setup_params(data)
-    data <- self$position$setup_data(data, params)
+    params <- self$position$setup_params(lp_data(data, self$layer_params))
+    data <- self$position$setup_data(lp_data(data, self$layer_params), params)
 
-    self$position$compute_layer(data, params, layout)
+    self$position$compute_layer(lp_data(data, self$layer_params), params, layout)
   },
 
   compute_geom_2 = function(self, data) {
     # Combine aesthetics, defaults, & params
     if (empty(data)) return(data)
 
-    self$geom$use_defaults(data, self$aes_params)
+    self$geom$use_defaults(lp_data(data, self$layer_params), self$aes_params)
   },
 
   finish_statistics = function(self, data) {
-    self$stat$finish_layer(data, self$stat_params)
+    self$stat$finish_layer(lp_data(data, self$layer_params), self$stat_params)
   },
 
   draw_geom = function(self, data, layout) {
@@ -331,8 +342,8 @@ Layer <- ggproto("Layer", NULL,
       return(rep(list(zeroGrob()), n))
     }
 
-    data <- self$geom$handle_na(data, self$geom_params)
-    self$geom$draw_layer(data, self$geom_params, layout, layout$coord)
+    data <- self$geom$handle_na(lp_data(data, self$layer_params), self$geom_params)
+    self$geom$draw_layer(lp_data(data, self$layer_params), self$geom_params, layout, layout$coord)
   }
 )
 
@@ -386,4 +397,9 @@ obj_desc <- function(x) {
       paste0("a base object of type", typeof(x))
     )
   }
+}
+
+lp_data <- function(data, layer_params) {
+  attr(data, "layer_params") <- layer_params
+  data
 }

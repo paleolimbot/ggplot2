@@ -72,6 +72,7 @@ Geom <- ggproto("Geom",
   },
 
   draw_layer = function(self, data, params, layout, coord) {
+    layer_params <- attr(data, "layer_params")
     if (empty(data)) {
       n <- if (is.factor(data$PANEL)) nlevels(data$PANEL) else 1L
       return(rep(list(zeroGrob()), n))
@@ -83,6 +84,7 @@ Geom <- ggproto("Geom",
     args <- c(list(quote(data), quote(panel_params), quote(coord)), params)
     lapply(split(data, data$PANEL), function(data) {
       if (empty(data)) return(zeroGrob())
+      data <- lp_data(data, layer_params)
 
       panel_params <- layout$panel_params[[data$PANEL[1]]]
       do.call(self$draw_panel, args)
@@ -90,8 +92,10 @@ Geom <- ggproto("Geom",
   },
 
   draw_panel = function(self, data, panel_params, coord, ...) {
+    layer_params <- attr(data, "layer_params")
     groups <- split(data, factor(data$group))
     grobs <- lapply(groups, function(group) {
+      group <- lp_data(group, layer_params)
       self$draw_group(group, panel_params, coord, ...)
     })
 
