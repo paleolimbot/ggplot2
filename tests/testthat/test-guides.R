@@ -44,6 +44,51 @@ test_that("show.legend handles named vectors", {
   expect_equal(n_legends(p), 0)
 })
 
+# Axis guides ------------------------------------------------------------
+
+test_that("structure of axis grobs are stable", {
+
+  axis_positions <- c("bottom", "top", "left", "right")
+  names(axis_positions) <- axis_positions
+
+  axis_grobs <- lapply(
+    axis_positions,
+    function(position) draw_guide_axis(
+      at = c(0.25, 0.5, 0.75),
+      as.character(1:3),
+      position = position,
+      theme = theme_test()
+    )
+  )
+
+  check_axis_grob <- function(grob, n_ticks = 3) {
+    expect_true(grid::is.grob(grob))
+    expect_is(grob, "gTree")
+    expect_length(grob$children, 2)
+
+    axis <- grob$children$axis
+    expect_is(axis, "gtable")
+    expect_equal(nrow(axis) * ncol(axis), 2)
+
+    is_title_grob <- vapply(axis$grobs, inherits, "titleGrob", FUN.VALUE = logical(1))
+    is_polyline_grob <- vapply(axis$grobs, inherits, "polyline", FUN.VALUE = logical(1))
+
+    expect_equal(sum(is_title_grob), 1)
+    expect_equal(sum(is_polyline_grob), 1)
+
+    labels <- axis$grobs[[which(is_title_grob)]]
+    ticks <- axis$grobs[[which(is_polyline_grob)]]
+
+    expect_length(labels$children[[1]]$label, n_ticks)
+    expect_length(ticks$id.lengths, n_ticks)
+  }
+
+  for(axis in axis_grobs) {
+    check_axis_grob(axis)
+  }
+
+})
+
 
 # Visual tests ------------------------------------------------------------
 
