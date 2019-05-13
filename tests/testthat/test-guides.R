@@ -46,14 +46,14 @@ test_that("show.legend handles named vectors", {
 
 # Axis guides ------------------------------------------------------------
 
-test_that("structure of axis grobs are stable", {
+test_that("structure of axis grobs is stable", {
 
   axis_positions <- c("bottom", "top", "left", "right")
   names(axis_positions) <- axis_positions
 
   axis_grobs <- lapply(
     axis_positions,
-    function(position) draw_guide_axis(
+    function(position) draw_axis(
       at = c(0.25, 0.5, 0.75),
       as.character(1:3),
       position = position,
