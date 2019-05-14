@@ -72,31 +72,35 @@ guide_axis <- function(# title (axis.title*)
   )
 }
 
+
 #' @export
 guide_train.axis <- function(guide, scale, aesthetic = NULL) {
-  # do nothing if scale is inappropriate
+
+  aesthetic <- aesthetic %||% scale$aesthetics[1]
+  breaks <- scale$get_breaks()
+
+  empty_ticks <- new_data_frame(
+    list(aesthetic = numeric(0), .value = numeric(0), .label = character(0))
+  )
+  names(empty_ticks) <- c(aesthetic, ".value", ".label")
+
   if (length(intersect(scale$aesthetics, guide$available_aes)) == 0) {
     warning(
-      "colourbar guide needs appropriate scales: ",
+      "axis guide needs appropriate scales: ",
       paste(guide$available_aes, collapse = ", "),
       call. = FALSE
     )
-    return(NULL)
+    guide$key <- empty_ticks
+  } else if (length(breaks) == 0 || all(is.na(breaks))) {
+    guide$key <- empty_ticks
+  } else {
+    ticks <- new_data_frame(setNames(list(scale$map(breaks)), aesthetic))
+    ticks$.value <- breaks
+    ticks$.label <- scale$get_labels(breaks)
+    guide$key <- ticks
   }
 
-  # create data frame for tick display
-  breaks <- scale$get_breaks()
-  if (length(breaks) == 0 || all(is.na(breaks))) {
-    return(NULL)
-  }
-
-  ticks <- new_data_frame(setNames(list(scale$map(breaks)), aesthetic %||% scale$aesthetics[1]))
-  ticks$.value <- breaks
-  ticks$.label <- scale$get_labels(breaks)
-
-  guide$key <- ticks
-  guide$hash <- digest::digest(list(guide$title, guide$key$.label, guide$direction, guide$name))
-
+  guide$hash <- digest::digest(list(guide$title, guide$key$.label, guide$name))
   guide
 }
 
