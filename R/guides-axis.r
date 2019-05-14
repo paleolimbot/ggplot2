@@ -149,6 +149,7 @@ guide_gengrob.axis <- function(guide, theme, position) {
     non_position_dim <- "x"
     position_size <- "height"
     non_position_size <- "width"
+    label_margin_name <- "margin_x"
     gtable_element <- gtable_row
 
     measure_gtable <- gtable_width
@@ -158,6 +159,7 @@ guide_gengrob.axis <- function(guide, theme, position) {
     non_position_dim <- "y"
     position_size <- "width"
     non_position_size <- "height"
+    label_margin_name <- "margin_y"
     gtable_element <- gtable_col
     measure_gtable <- gtable_height
     measure_labels <- grobHeight
@@ -196,9 +198,10 @@ guide_gengrob.axis <- function(guide, theme, position) {
   }
 
   label_coords <- list(
-    position = guide$key[[aesthetic]],
-    non_position = rep(non_position_panel, times = n_breaks) + (tick_direction * tick_length),
-    label = guide$key$.label
+    position = unit(guide$key[[aesthetic]], "native"),
+    non_position = rep(non_position_panel, times = n_breaks),
+    label = guide$key$.label,
+    margin = TRUE
   )
 
   tick_coords <- list(
@@ -210,8 +213,7 @@ guide_gengrob.axis <- function(guide, theme, position) {
     id.lengths = rep(2, times = n_breaks)
   )
 
-
-  names(label_coords) <- c(position_dim, non_position_dim, "label")
+  names(label_coords) <- c(position_dim, non_position_dim, "label", label_margin_name)
   names(tick_coords) <- c(position_dim, non_position_dim, "id.lengths")
 
   grobs <- list(
