@@ -86,13 +86,15 @@ test_that("structure of axis grobs is stable", {
   for(axis in axis_grobs) {
     check_axis_grob(axis)
   }
-
 })
 
 test_that("structure of empty axis grobs is stable", {
+  axis_positions <- c("bottom", "top", "left", "right")
+  names(axis_positions) <- axis_positions
+
   empty_axis_grobs <- lapply(
     axis_positions,
-    function(position) ggplot2:::draw_axis(
+    function(position) draw_axis(
       at = NULL,
       labels = NULL,
       position = position,
@@ -109,8 +111,6 @@ test_that("structure of empty axis grobs is stable", {
   for(axis in empty_axis_grobs) {
     check_axis_grob(axis)
   }
-
-
 })
 
 

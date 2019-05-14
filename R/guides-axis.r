@@ -151,7 +151,6 @@ guide_gengrob.axis <- function(guide, theme, position) {
     non_position_size <- "width"
     label_margin_name <- "margin_x"
     gtable_element <- gtable_row
-
     measure_gtable <- gtable_width
     measure_labels <- grobWidth
   } else {
@@ -168,9 +167,11 @@ guide_gengrob.axis <- function(guide, theme, position) {
   if (is_second) {
     tick_direction <- 1
     non_position_panel <- unit(0, "npc")
+    tick_coordinate_order <- c(2, 1)
   } else {
     tick_direction <- -1
     non_position_panel <- unit(1, "npc")
+    tick_coordinate_order <- c(1, 2)
   }
 
   if (is_first_gtable) {
@@ -207,7 +208,7 @@ guide_gengrob.axis <- function(guide, theme, position) {
   tick_coords <- list(
     position = rep(label_coords$position, each = 2),
     non_position = rep(
-      unit.c(non_position_panel + (tick_direction * tick_length), non_position_panel),
+      unit.c(non_position_panel + (tick_direction * tick_length), non_position_panel)[tick_coordinate_order],
       times = n_breaks
     ),
     id.lengths = rep(2, times = n_breaks)
