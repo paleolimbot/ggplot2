@@ -91,7 +91,7 @@ guide_train.axis <- function(guide, scale, aesthetic = NULL) {
       call. = FALSE
     )
     guide$key <- empty_ticks
-  } else if (length(breaks) == 0 || all(is.na(breaks))) {
+  } else if (length(breaks) == 0) {
     guide$key <- empty_ticks
   } else {
     ticks <- new_data_frame(setNames(list(scale$map(breaks)), aesthetic))
