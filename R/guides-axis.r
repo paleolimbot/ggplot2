@@ -1,7 +1,7 @@
 
 #' Axis guide
 #'
-#' Axis guides show
+#' Axis guides ... don't yet have any defined role in ggplot2
 #'
 #' @inheritParams guide_legend
 #' @param line.theme An [element_line()] to use as a template for the line
@@ -10,12 +10,9 @@
 #'   along the axis. Usually set with [theme(axis.ticks = ...)][theme()].
 #' @param tick.length A [grid::unit()]
 #'
-#' @family guides
-#' @export
+#' @keywords internal
+#' @noRd
 #'
-#' @return
-#'
-#' @examples
 guide_axis <- function(# title (axis.title*)
                        title = waiver(),
                        title.position = NULL,
@@ -73,7 +70,6 @@ guide_axis <- function(# title (axis.title*)
 }
 
 
-#' @export
 guide_train.axis <- function(guide, scale, aesthetic = NULL) {
 
   aesthetic <- aesthetic %||% scale$aesthetics[1]
@@ -114,13 +110,11 @@ guide_train.axis <- function(guide, scale, aesthetic = NULL) {
 }
 
 # simply discards the new guide
-#' @export
 guide_merge.axis <- function(guide, new_guide) {
   guide
 }
 
 # axis guides don't care which geometry uses these aesthetics
-#' @export
 guide_geom.axis <- function(guide, layers, default_mapping) {
   guide
 }
@@ -128,7 +122,6 @@ guide_geom.axis <- function(guide, layers, default_mapping) {
 # Unlike other guides,
 # axis guides don't draw the guide title, and require a `position`
 # in c("top", "bottom", "right", "left")
-#' @export
 guide_gengrob.axis <- function(guide, theme, position) {
   aesthetic <- names(guide$key)[!grepl("^\\.", names(guide$key))][1]
 
@@ -274,6 +267,7 @@ guide_gengrob.axis <- function(guide, theme, position) {
 #' @param theme theme object
 #'
 #' @keywords internal
+#' @noRd
 #' @return A grob
 #'
 draw_axis <- function(at, labels, position = "right", theme) {
