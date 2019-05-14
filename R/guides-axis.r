@@ -200,7 +200,6 @@ guide_gengrob.axis <- function(guide, theme, position) {
 
   label_coords <- list(
     position = unit(guide$key[[aesthetic]], "native"),
-    non_position = rep(non_position_panel, times = n_breaks),
     label = guide$key$.label,
     margin = TRUE
   )
@@ -214,7 +213,7 @@ guide_gengrob.axis <- function(guide, theme, position) {
     id.lengths = rep(2, times = n_breaks)
   )
 
-  names(label_coords) <- c(position_dim, non_position_dim, "label", label_margin_name)
+  names(label_coords) <- c(position_dim, "label", label_margin_name)
   names(tick_coords) <- c(position_dim, non_position_dim, "id.lengths")
 
   grobs <- list(
