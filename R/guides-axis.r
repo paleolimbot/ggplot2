@@ -223,7 +223,12 @@ guide_gengrob.axis <- function(guide, theme, position) {
   )
 
   # assemble elements
-  gt_dims <- list(dims = unit.c(tick_length, measure_labels(grobs$labels)), dim = unit(1, "npc"))
+  gt_element_order <- match(table_order, c("labels", "ticks"))
+  gt_dims <- list(
+    dims = unit.c(measure_labels(grobs$labels), tick_length),
+    dim = unit(1, "npc")
+  )
+  gt_dims$dims <- gt_dims$dims[gt_element_order]
   names(gt_dims) <- c(paste0(non_position_size, "s"), position_size)
 
   gt <- do.call(
