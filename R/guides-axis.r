@@ -13,19 +13,9 @@
 #' @keywords internal
 #' @noRd
 #'
-guide_axis <- function(# title (axis.title*)
-                       title = waiver(),
-                       title.position = NULL,
-                       title.theme = NULL,
-                       title.hjust = NULL,
-                       title.vjust = NULL,
-
-                       # label (axis.text*)
+guide_axis <- function(# label (axis.text*)
                        label = TRUE,
-                       label.position = NULL,
                        label.theme = NULL,
-                       label.hjust = NULL,
-                       label.vjust = NULL,
 
                        # axis line (axis.line*)
                        line.theme = NULL,
@@ -38,19 +28,9 @@ guide_axis <- function(# title (axis.title*)
 ) {
   structure(
     list(
-      # title
-      title = title,
-      title.position = title.position,
-      title.theme = title.theme,
-      title.hjust = title.hjust,
-      title.vjust = title.vjust,
-
       # label
       label = label,
-      label.position = label.position,
       label.theme = label.theme,
-      label.hjust = label.hjust,
-      label.vjust = label.vjust,
 
       # axis line (axis.line*)
       line.theme = line.theme,
@@ -109,7 +89,7 @@ guide_train.axis <- function(guide, scale, aesthetic = NULL) {
   guide
 }
 
-# simply discards the new guide
+# discards the new guide
 guide_merge.axis <- function(guide, new_guide) {
   guide
 }
@@ -190,7 +170,7 @@ guide_gengrob.axis <- function(guide, theme, position) {
   names(line_coords) <- c(position_dim, non_position_dim)
   line_grob <- do.call(element_grob, c(list(line_element), line_coords))
 
-  if (n_breaks == 0) {
+  if (!guide$label || n_breaks == 0) {
     return(
       absoluteGrob(
         gList(line_grob),
