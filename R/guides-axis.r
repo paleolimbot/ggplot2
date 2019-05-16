@@ -1,7 +1,9 @@
 
 #' Axis guide
 #'
-#' Axis guides ... don't yet have any defined role in ggplot2
+#' Axis guides are the visual representation of position scales like those
+#' created with [scale_(x|y)_continuous()][scale_x_continuous()] and
+#' [scale_(x|y)_discrete()][scale_x_discrete()].
 #'
 #' @inheritParams guide_legend
 #' @param line.theme An [element_line()] to use as a template for the line
@@ -10,8 +12,7 @@
 #'   along the axis. Usually set with [theme(axis.ticks = ...)][theme()].
 #' @param tick.length A [grid::unit()]
 #'
-#' @keywords internal
-#' @noRd
+#' @export
 #'
 guide_axis <- function(# label (axis.text*)
                        label = TRUE,
