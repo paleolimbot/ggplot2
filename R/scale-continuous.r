@@ -78,13 +78,14 @@ scale_x_continuous <- function(name = waiver(), breaks = waiver(),
                                minor_breaks = waiver(), labels = waiver(),
                                limits = NULL, expand = waiver(), oob = censor,
                                na.value = NA_real_, trans = "identity",
+                               guide = guide_axis(),
                                position = "bottom", sec.axis = waiver()) {
   sc <- continuous_scale(
     c("x", "xmin", "xmax", "xend", "xintercept", "xmin_final", "xmax_final", "xlower", "xmiddle", "xupper", "x0"),
     "position_c", identity, name = name, breaks = breaks,
     minor_breaks = minor_breaks, labels = labels, limits = limits,
     expand = expand, oob = oob, na.value = na.value, trans = trans,
-    guide = "none", position = position, super = ScaleContinuousPosition
+    guide = guide, position = position, super = ScaleContinuousPosition
   )
 
   set_sec_axis(sec.axis, sc)
@@ -97,13 +98,14 @@ scale_y_continuous <- function(name = waiver(), breaks = waiver(),
                                minor_breaks = waiver(), labels = waiver(),
                                limits = NULL, expand = waiver(), oob = censor,
                                na.value = NA_real_, trans = "identity",
+                               guide = guide_axis(),
                                position = "left", sec.axis = waiver()) {
   sc <- continuous_scale(
     c("y", "ymin", "ymax", "yend", "yintercept", "ymin_final", "ymax_final", "lower", "middle", "upper", "y0"),
     "position_c", identity, name = name, breaks = breaks,
     minor_breaks = minor_breaks, labels = labels, limits = limits,
     expand = expand, oob = oob, na.value = na.value, trans = trans,
-    guide = "none", position = position, super = ScaleContinuousPosition
+    guide = guide, position = position, super = ScaleContinuousPosition
   )
 
   set_sec_axis(sec.axis, sc)

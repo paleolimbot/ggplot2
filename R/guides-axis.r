@@ -25,6 +25,9 @@ guide_axis <- function(# label (axis.text*)
                        tick.theme = NULL,
                        tick.length = NULL,
 
+                       # general
+                       order = 0,
+
                        ...
 ) {
   structure(
@@ -40,6 +43,9 @@ guide_axis <- function(# label (axis.text*)
       tick.theme = tick.theme,
       tick.length = tick.length,
 
+      # general
+      order = order,
+
       # parameter
       available_aes = c("x", "y"),
       ...,
@@ -50,7 +56,7 @@ guide_axis <- function(# label (axis.text*)
   )
 }
 
-
+#' @export
 guide_train.axis <- function(guide, scale, aesthetic = NULL) {
 
   aesthetic <- aesthetic %||% scale$aesthetics[1]
@@ -91,11 +97,13 @@ guide_train.axis <- function(guide, scale, aesthetic = NULL) {
 }
 
 # discards the new guide
+#' @export
 guide_merge.axis <- function(guide, new_guide) {
   guide
 }
 
 # axis guides don't care which geometry uses these aesthetics
+#' @export
 guide_geom.axis <- function(guide, layers, default_mapping) {
   guide
 }
@@ -103,7 +111,8 @@ guide_geom.axis <- function(guide, layers, default_mapping) {
 # Unlike other guides,
 # axis guides don't draw the guide title, and require a `position`
 # in c("top", "bottom", "right", "left")
-guide_gengrob.axis <- function(guide, theme, position) {
+#' @export
+guide_gengrob.axis <- function(guide, theme, position = "bottom", ...) {
   aesthetic <- names(guide$key)[!grepl("^\\.", names(guide$key))][1]
 
   match.arg(aesthetic, c("x", "y"))

@@ -298,7 +298,7 @@ guide_geom.legend <- function(guide, layers, default_mapping) {
 }
 
 #' @export
-guide_gengrob.legend <- function(guide, theme) {
+guide_gengrob.legend <- function(guide, theme, ...) {
 
   # default setting
   label.position <- guide$label.position %||% "right"

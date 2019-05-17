@@ -5,7 +5,7 @@
 \title{Axis guide}
 \usage{
 guide_axis(label = TRUE, label.theme = NULL, line.theme = NULL,
-  tick.theme = NULL, tick.length = NULL, ...)
+  tick.theme = NULL, tick.length = NULL, order = 0, ...)
 }
 \arguments{
 \item{label}{logical. If \code{TRUE} then the labels are drawn. If
@@ -22,6 +22,11 @@ along the axis. Usually set with \link[=theme]{theme(axis.line = ...)}.}
 along the axis. Usually set with \link[=theme]{theme(axis.ticks = ...)}.}
 
 \item{tick.length}{A \code{\link[grid:unit]{grid::unit()}}}
+
+\item{order}{positive integer less than 99 that specifies the order of
+this guide among multiple guides. This controls the order in which
+multiple guides are displayed, not the contents of the guide itself.
+If 0 (default), the order is determined by a secret algorithm.}
 
 \item{...}{ignored.}
 }

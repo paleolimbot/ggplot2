@@ -259,7 +259,7 @@ guide_geom.colorbar <- function(guide, layers, default_mapping) {
 }
 
 #' @export
-guide_gengrob.colorbar <- function(guide, theme) {
+guide_gengrob.colorbar <- function(guide, theme, ...) {
 
   # settings of location and size
   if (guide$direction == "horizontal") {

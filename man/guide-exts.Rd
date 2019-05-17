@@ -14,7 +14,7 @@ guide_merge(guide, new_guide)
 
 guide_geom(guide, layers, default_mapping)
 
-guide_gengrob(guide, theme)
+guide_gengrob(guide, theme, ...)
 }
 \arguments{
 \item{guide}{The guide object}
