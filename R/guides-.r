@@ -165,40 +165,44 @@ guides_train <- function(scales, theme, guides, labels) {
   gdefs <- list()
   for (scale in scales$scales) {
     scale_aesthetics <- unique(aes_to_scale(scale$aesthetics))
-    for (output in scale_aesthetics) {
-
-      # guides(XXX) is stored in guides[[XXX]],
-      # which is prior to scale_ZZZ(guide=XXX)
-      # guide is determined in order of:
-      #   + guides(XXX) > + scale_ZZZ(guide=XXX) > default(i.e., legend)
-      guide <- guides[[output]] %||% scale$guide
-
-      # this should be changed to testing guide == "none"
-      # scale$legend is backward compatibility
-      # if guides(XXX=FALSE), then scale_ZZZ(guides=XXX) is discarded.
-      if (identical(guide, "none") || isFALSE(guide)) next
-
-      # check the validity of guide.
-      # if guide is character, then find the guide object
-      guide <- validate_guide(guide)
-
-      # check the consistency of the guide and scale.
-      if (!identical(guide$available_aes, "any") && !any(scale$aesthetics %in% guide$available_aes))
-        stop("Guide '", guide$name, "' cannot be used for '", scale$aesthetics, "'.")
-
-      guide$title <- scale$make_title(guide$title %|W|% scale$name %|W|% labels[[output]])
-
-      # direction of this grob
-      guide$direction <- guide$direction %||% theme$legend.direction
-
-      # each guide object trains scale within the object,
-      # so Guides (i.e., the container of guides) need not to know about them
-      guide <- guide_train(guide, scale, output)
-
-      if (!is.null(guide)) gdefs[[length(gdefs) + 1]] <- guide
+    for (aesthetic in scale_aesthetics) {
+      guide <- guides_train_single(scale, aesthetic, theme, guides, labels)
+      if (!is.null(guide)) {
+        gdefs[[length(gdefs) + 1]] <- guide
+      }
     }
   }
   gdefs
+}
+
+guides_train_single <- function(scale, aesthetic, theme, guides, labels) {
+  # guides(XXX) is stored in guides[[XXX]],
+  # which is prior to scale_ZZZ(guide=XXX)
+  # guide is determined in order of:
+  #   + guides(XXX) > + scale_ZZZ(guide=XXX) > default(i.e., legend)
+  guide <- guides[[aesthetic]] %||% scale$guide
+
+  # this should be changed to testing guide == "none"
+  # scale$legend is backward compatibility
+  # if guides(XXX=FALSE), then scale_ZZZ(guides=XXX) is discarded.
+  if (identical(guide, "none") || isFALSE(guide)) return(NULL)
+
+  # check the validity of guide.
+  # if guide is character, then find the guide object
+  guide <- validate_guide(guide)
+
+  # check the consistency of the guide and scale.
+  if (!identical(guide$available_aes, "any") && !any(scale$aesthetics %in% guide$available_aes))
+    stop("Guide '", guide$name, "' cannot be used for '", scale$aesthetics, "'.")
+
+  guide$title <- scale$make_title(guide$title %|W|% scale$name %|W|% labels[[aesthetic]])
+
+  # direction of this grob
+  guide$direction <- guide$direction %||% theme$legend.direction
+
+  # each guide object trains scale within the object,
+  # so Guides (i.e., the container of guides) need not to know about them
+  guide_train(guide, scale, aesthetic)
 }
 
 # merge overlapped guides
