@@ -5,9 +5,11 @@
 \alias{scale_y_discrete}
 \title{Position scales for discrete data}
 \usage{
-scale_x_discrete(..., expand = waiver(), position = "bottom")
+scale_x_discrete(..., expand = waiver(), guide = guide_axis(),
+  position = "bottom")
 
-scale_y_discrete(..., expand = waiver(), position = "left")
+scale_y_discrete(..., expand = waiver(), guide = guide_axis(),
+  position = "left")
 }
 \arguments{
 \item{...}{Arguments passed on to \code{discrete_scale}

@@ -50,18 +50,18 @@
 #'   geom_point() +
 #'   scale_x_discrete(labels = abbreviate)
 #' }
-scale_x_discrete <- function(..., expand = waiver(), position = "bottom") {
+scale_x_discrete <- function(..., expand = waiver(), guide = guide_axis(), position = "bottom") {
   sc <- discrete_scale(position_aes_x, "position_d", identity, ...,
-    expand = expand, position = position, super = ScaleDiscretePosition)
+    expand = expand, guide = guide, position = position, super = ScaleDiscretePosition)
 
   sc$range_c <- continuous_range()
   sc
 }
 #' @rdname scale_discrete
 #' @export
-scale_y_discrete <- function(..., expand = waiver(), position = "left") {
+scale_y_discrete <- function(..., expand = waiver(), guide = guide_axis(), position = "left") {
   sc <- discrete_scale(position_aes_y, "position_d", identity, ...,
-    expand = expand, position = position, super = ScaleDiscretePosition)
+    expand = expand, guide = guide, position = position, super = ScaleDiscretePosition)
 
   sc$range_c <- continuous_range()
   sc
