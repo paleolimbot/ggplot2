@@ -171,10 +171,15 @@ rename_aes <- function(x) {
   x
 }
 
+position_aes_suffix <- c("", "min", "max", "end", "intercept", "min_final",
+                         "max_final", "lower", "middle", "upper", "0")
+position_aes_x <- paste0("x", position_aes_suffix)
+position_aes_y <- paste0("y", position_aes_suffix)
+
 # Look up the scale that should be used for a given aesthetic
 aes_to_scale <- function(var) {
-  var[var %in% c("x", "xmin", "xmax", "xend", "xintercept")] <- "x"
-  var[var %in% c("y", "ymin", "ymax", "yend", "yintercept")] <- "y"
+  var[var %in% position_aes_x] <- "x"
+  var[var %in% position_aes_y] <- "y"
 
   var
 }
