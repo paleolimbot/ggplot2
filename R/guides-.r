@@ -164,7 +164,8 @@ guides_train <- function(scales, theme, guides, labels) {
 
   gdefs <- list()
   for (scale in scales$scales) {
-    for (output in scale$aesthetics) {
+    scale_aesthetics <- unique(aes_to_scale(scale$aesthetics))
+    for (output in scale_aesthetics) {
 
       # guides(XXX) is stored in guides[[XXX]],
       # which is prior to scale_ZZZ(guide=XXX)

@@ -92,7 +92,8 @@ guide_train.axis <- function(guide, scale, aesthetic = NULL) {
     guide$key <- ticks
   }
 
-  guide$hash <- digest::digest(list(guide$title, guide$key$.label, guide$name))
+  guide$name <- paste0(guide$name, "_", aesthetic)
+  guide$hash <- digest::digest(list(guide$title, guide$key$.value, guide$key$.label, guide$name))
   guide
 }
 
@@ -131,10 +132,10 @@ guide_gengrob.axis <- function(guide, theme, position = "bottom", ...) {
   tick_length_element_name <- paste0("axis.ticks.length.", aesthetic, ".", position)
   label_element_name <- paste0("axis.text.", aesthetic, ".", position)
 
-  line_element <- guide$line.theme %||% calc_element(line_element_name, theme)
-  tick_element <- guide$tick.theme %||% calc_element(tick_element_name, theme)
-  tick_length <- guide$tick.length %||% calc_element(tick_length_element_name, theme)
-  label_element <- guide$label.theme %||% calc_element(label_element_name, theme)
+  line_element <- guide$line.theme %||% calc_element(line_element_name, theme) %||% element_blank()
+  tick_element <- guide$tick.theme %||% calc_element(tick_element_name, theme) %||% element_blank()
+  tick_length <- guide$tick.length %||% calc_element(tick_length_element_name, theme) %||% element_blank()
+  label_element <- guide$label.theme %||% calc_element(label_element_name, theme) %||% element_blank()
 
   if (is_vertical) {
     position_dim <- "y"
