@@ -166,7 +166,7 @@ guides_train <- function(scales, theme, guides, labels) {
   for (scale in scales$scales) {
     scale_aesthetics <- unique(aes_to_scale(scale$aesthetics))
     for (aesthetic in scale_aesthetics) {
-      guide <- guides_train_single(scale, aesthetic, theme, guides, labels)
+      guide <- guides_train_single(scale, aesthetic, guides, labels, theme)
       if (!is.null(guide)) {
         gdefs[[length(gdefs) + 1]] <- guide
       }
@@ -175,7 +175,7 @@ guides_train <- function(scales, theme, guides, labels) {
   gdefs
 }
 
-guides_train_single <- function(scale, aesthetic, theme, guides, labels) {
+guides_train_single <- function(scale, aesthetic, guides, labels = NULL, theme = NULL) {
   # guides(XXX) is stored in guides[[XXX]],
   # which is prior to scale_ZZZ(guide=XXX)
   # guide is determined in order of:

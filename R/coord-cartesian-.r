@@ -113,6 +113,21 @@ CoordCartesian <- ggproto("CoordCartesian", Coord,
       train_cartesian(scale_x, self$limits$x, "x"),
       train_cartesian(scale_y, self$limits$y, "y")
     )
+  },
+
+  setup_panel_guides = function(self, scale_x, scale_y, panel_params, guides, params = list()) {
+    panel_guides <- list()
+    panel_guides[["x"]] <- guides_train_single(scale_x, "x", guides)
+    panel_guides[["y"]] <- guides_train_single(scale_y, "y", guides)
+
+    # if(!(is.waive(scale_x$secondary.axis) || scale_x$secondary.axis$empty())) {
+      # panel_guides[["x.sec"]] <- ?????
+    # }
+    # if(!(is.waive(scale_y$secondary.axis) || scale_y$secondary.axis$empty())) {
+      # panel_guides[["y.sec"]] <- ?????
+    # }
+
+    panel_guides
   }
 )
 

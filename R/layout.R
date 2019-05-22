@@ -144,6 +144,32 @@ Layout <- ggproto("Layout", NULL,
     )
   },
 
+  train_guides = function(self, layers, default_mapping, guides) {
+    # coord$setup_panel_guides produces a list() of trained guides
+    # for each panel
+
+    self$panel_guides <- Map(
+      self$coord$setup_panel_guides,
+      self$panel_scales_x,
+      self$panel_scales_y,
+      self$panel_params,
+      list(guides),
+      list(self$coord_params)
+    )
+
+    for(i in seq_along(self$panel_guides)) {
+      self$panel_guides[[i]] <- lapply(
+        self$panel_guides[[i]],
+        function(guide) {
+          if(inherits(guide, "guide")) {
+            guide_geom(guide, layers, default_mapping)
+          } else {
+            guide
+          }
+      })
+    }
+  },
+
   map_position = function(self, data) {
     layout <- self$layout
 

@@ -71,7 +71,7 @@ Coord <- ggproto("Coord",
                panel_params$y.major)
   },
 
-  render_axis_h = function(panel_params, theme) {
+  render_axis_h = function(panel_params, theme, panel_guides = NULL) {
     arrange <- panel_params$x.arrange %||% c("secondary", "primary")
 
     list(
@@ -80,7 +80,7 @@ Coord <- ggproto("Coord",
     )
   },
 
-  render_axis_v = function(panel_params, theme) {
+  render_axis_v = function(panel_params, theme, panel_guides = NULL) {
     arrange <- panel_params$y.arrange %||% c("primary", "secondary")
 
     list(
@@ -112,6 +112,10 @@ Coord <- ggproto("Coord",
   },
 
   setup_panel_params = function(scale_x, scale_y, params = list()) {
+    list()
+  },
+
+  setup_panel_guides = function(scale_x, scale_y, panel_params, guides, params = list()) {
     list()
   },
 
