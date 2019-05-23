@@ -116,17 +116,24 @@ CoordCartesian <- ggproto("CoordCartesian", Coord,
   },
 
   setup_panel_guides = function(self, scale_x, scale_y, panel_params, guides, params = list()) {
-    panel_guides <- list()
-    panel_guides[["x"]] <- guides_train_single(scale_x, "x", guides)
-    panel_guides[["y"]] <- guides_train_single(scale_y, "y", guides)
 
-    # if(!(is.waive(scale_x$secondary.axis) || scale_x$secondary.axis$empty())) {
-      # panel_guides[["x.sec"]] <- ?????
-    # }
-    # if(!(is.waive(scale_y$secondary.axis) || scale_y$secondary.axis$empty())) {
-      # panel_guides[["y.sec"]] <- ?????
-    # }
+    raw_scales <- list(x = scale_x, y = scale_y)
 
+    dummy_scale <- function(axis, aesthetic) {
+      list(
+        get_breaks = function() panel_params[[paste0(axis, ".major")]],
+        map = function(breaks) panel_params[[paste0(axis, ".major")]],
+        get_labels = function(breaks) panel_params[[paste0(axis, ".labels")]],
+        aesthetics = aesthetic,
+        guide = raw_scales[[aesthetic]]$guide,
+        make_title = function(...) waiver()
+      )
+    }
+
+    axis_names <- c("x", "y", "x.sec", "y.sec")
+    aesthetic_names <- substr(axis_names, 1, 1)
+    scales <- Map(dummy_scale, axis_names, aesthetic_names)
+    panel_guides <- Map(guides_train_single, scales, aesthetic_names, list(guides))
     panel_guides
   }
 )
