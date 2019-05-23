@@ -290,14 +290,14 @@ FacetGrid <- ggproto("FacetGrid", Facet,
     }
     data
   },
-  draw_panels = function(panels, layout, x_scales, y_scales, ranges, coord, data, theme, params) {
+  draw_panels = function(panels, layout, x_scales, y_scales, ranges, coord, data, theme, params, panel_guides) {
     if ((params$free$x || params$free$y) && !coord$is_free()) {
       stop(snake_class(coord), " doesn't support free scales", call. = FALSE)
     }
 
     cols <- which(layout$ROW == 1)
     rows <- which(layout$COL == 1)
-    axes <- render_axes(ranges[cols], ranges[rows], coord, theme, transpose = TRUE)
+    axes <- render_axes(ranges[cols], ranges[rows], coord, theme, transpose = TRUE, panel_guides[cols], panel_guides[rows])
 
     col_vars <- unique(layout[names(params$cols)])
     row_vars <- unique(layout[names(params$rows)])

@@ -100,7 +100,8 @@ Layout <- ggproto("Layout", NULL,
       self$coord,
       data,
       theme,
-      self$facet_params
+      self$facet_params,
+      self$panel_guides
     )
 
     # Draw individual labels, then add to gtable

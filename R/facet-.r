@@ -582,6 +582,7 @@ combine_vars <- function(data, env = emptyenv(), vars = NULL, drop = TRUE) {
 #' @param coord A `Coord` object
 #' @param theme A `theme` object
 #' @param transpose Should the output be transposed?
+#' @param panel_guides A list of panel guides
 #'
 #' @return A list with the element "x" and "y" each containing axis
 #' specifications for the ranges passed in. Each axis specification is a list
@@ -594,13 +595,14 @@ combine_vars <- function(data, env = emptyenv(), vars = NULL, drop = TRUE) {
 #' @keywords internal
 #' @export
 #'
-render_axes <- function(x = NULL, y = NULL, coord, theme, transpose = FALSE) {
+render_axes <- function(x = NULL, y = NULL, coord, theme, transpose = FALSE,
+                        panel_guides_x = list(NULL), panel_guides_y = list(NULL)) {
   axes <- list()
   if (!is.null(x)) {
-    axes$x <- lapply(x, coord$render_axis_h, theme)
+    axes$x <- Map(coord$render_axis_h, x, list(theme), panel_guides_x)
   }
   if (!is.null(y)) {
-    axes$y <- lapply(y, coord$render_axis_v, theme)
+    axes$y <- Map(coord$render_axis_v, y, list(theme), panel_guides_y)
   }
   if (transpose) {
     axes <- list(

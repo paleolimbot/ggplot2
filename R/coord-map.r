@@ -291,7 +291,7 @@ CoordMap <- ggproto("CoordMap", Coord,
     ))
   },
 
-  render_axis_h = function(self, panel_params, theme) {
+  render_axis_h = function(self, panel_params, theme, panel_guides) {
     arrange <- panel_params$x.arrange %||% c("secondary", "primary")
 
     if (is.null(panel_params$x.major)) {
@@ -315,7 +315,7 @@ CoordMap <- ggproto("CoordMap", Coord,
     axes
   },
 
-  render_axis_v = function(self, panel_params, theme) {
+  render_axis_v = function(self, panel_params, theme, panel_guides) {
     arrange <- panel_params$y.arrange %||% c("primary", "secondary")
 
     if (is.null(panel_params$y.major)) {

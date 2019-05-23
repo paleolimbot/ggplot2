@@ -214,7 +214,7 @@ CoordSf <- ggproto("CoordSf", CoordCartesian,
     ggname("grill", do.call("grobTree", grobs))
   },
 
-  render_axis_h = function(self, panel_params, theme) {
+  render_axis_h = function(self, panel_params, theme, panel_guides) {
     graticule <- panel_params$graticule
 
     # top axis
@@ -292,7 +292,7 @@ CoordSf <- ggproto("CoordSf", CoordCartesian,
     list(top = top, bottom = bottom)
   },
 
-  render_axis_v = function(self, panel_params, theme) {
+  render_axis_v = function(self, panel_params, theme, panel_guides) {
     graticule <- panel_params$graticule
 
     # right axis

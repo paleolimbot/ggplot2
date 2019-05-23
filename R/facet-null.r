@@ -39,7 +39,7 @@ FacetNull <- ggproto("FacetNull", Facet,
     data$PANEL <- factor(1)
     data
   },
-  draw_panels = function(panels, layout, x_scales, y_scales, ranges, coord, data, theme, params) {
+  draw_panels = function(panels, layout, x_scales, y_scales, ranges, coord, data, theme, params, panel_guides) {
 
     range <- ranges[[1]]
 
@@ -51,8 +51,8 @@ FacetNull <- ggproto("FacetNull", Facet,
     } else {
       respect <- TRUE
     }
-    axis_h <- coord$render_axis_h(range, theme)
-    axis_v <- coord$render_axis_v(range, theme)
+    axis_h <- coord$render_axis_h(range, theme, panel_guides[[1]])
+    axis_v <- coord$render_axis_v(range, theme, panel_guides[[1]])
 
     all <- matrix(list(
       zeroGrob(),  axis_h$top,    zeroGrob(),

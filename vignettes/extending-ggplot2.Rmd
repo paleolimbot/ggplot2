@@ -611,7 +611,7 @@ While the two functions above have been deceivingly simple, this last one is goi
 
 ```{r}
 render <- function(panels, layout, x_scales, y_scales, ranges, coord, data,
-                   theme, params) {
+                   theme, params, panel_guides) {
   # Place panels according to settings
   if (params$horizontal) {
     # Put panels in matrix and convert to a gtable
@@ -791,7 +791,7 @@ FacetTrans <- ggproto("FacetTrans", Facet,
   # A few changes from before to accommodate that axes are now not duplicate of each other
   # We also add a panel strip to annotate the different panels
   draw_panels = function(panels, layout, x_scales, y_scales, ranges, coord,
-                         data, theme, params) {
+                         data, theme, params, panel_guides) {
     # Place panels according to settings
     if (params$horizontal) {
       # Put panels in matrix and convert to a gtable

@@ -168,7 +168,7 @@ CoordPolar <- ggproto("CoordPolar", Coord,
     data
   },
 
-  render_axis_v = function(self, panel_params, theme) {
+  render_axis_v = function(self, panel_params, theme, panel_guides) {
     arrange <- panel_params$r.arrange %||% c("primary", "secondary")
 
     x <- r_rescale(self, panel_params$r.major, panel_params$r.range) + 0.5
@@ -187,7 +187,7 @@ CoordPolar <- ggproto("CoordPolar", Coord,
     )
   },
 
-  render_axis_h = function(panel_params, theme) {
+  render_axis_h = function(panel_params, theme, panel_guides) {
     list(
       top = zeroGrob(),
       bottom = draw_axis(NA, "", "bottom", theme)

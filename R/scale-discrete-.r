@@ -15,6 +15,8 @@
 #'   0.6 units on each side for discrete variables.
 #' @param position The position of the axis. `left` or `right` for y
 #' axes, `top` or `bottom` for x axes
+#' @param guide A function used to create a guide or its name. See
+#'   [guides()] for more info.
 #' @rdname scale_discrete
 #' @family position scales
 #' @export

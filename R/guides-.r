@@ -155,6 +155,8 @@ validate_guide <- function(guide) {
     match.fun(paste("guide_", guide, sep = ""))()
   else if (inherits(guide, "guide"))
     guide
+  else if (is.null(guide))
+    guide_none()
   else
     stop("Unknown guide: ", guide)
 }

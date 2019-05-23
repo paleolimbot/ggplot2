@@ -4,7 +4,8 @@
 \alias{render_axes}
 \title{Render panel axes}
 \usage{
-render_axes(x = NULL, y = NULL, coord, theme, transpose = FALSE)
+render_axes(x = NULL, y = NULL, coord, theme, transpose = FALSE,
+  panel_guides_x = list(NULL), panel_guides_y = list(NULL))
 }
 \arguments{
 \item{x, y}{A list of ranges as available to the draw_panel method in
@@ -15,6 +16,8 @@ render_axes(x = NULL, y = NULL, coord, theme, transpose = FALSE)
 \item{theme}{A \code{theme} object}
 
 \item{transpose}{Should the output be transposed?}
+
+\item{panel_guides}{A list of panel guides}
 }
 \value{
 A list with the element "x" and "y" each containing axis
