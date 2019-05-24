@@ -25,10 +25,11 @@ Layout <- ggproto("Layout", NULL,
   # A data frame giving the layout of the data into panels
   layout = NULL,
 
-  # Per panel scales and params
+  # Per panel scales, params, and guides
   panel_scales_x = NULL,
   panel_scales_y = NULL,
   panel_params = NULL,
+  panel_guides = NULL,
 
   setup = function(self, data, plot_data = new_data_frame(), plot_env = emptyenv()) {
     data <- c(list(plot_data), data)
@@ -142,6 +143,32 @@ Layout <- ggproto("Layout", NULL,
       data,
       self$facet_params
     )
+  },
+
+  train_guides = function(self, layers, default_mapping, guides) {
+    # coord$setup_panel_guides produces a list() of trained guides
+    # for each panel
+
+    self$panel_guides <- Map(
+      self$coord$setup_panel_guides,
+      self$panel_scales_x,
+      self$panel_scales_y,
+      self$panel_params,
+      list(guides),
+      list(self$coord_params)
+    )
+
+    for(i in seq_along(self$panel_guides)) {
+      self$panel_guides[[i]] <- lapply(
+        self$panel_guides[[i]],
+        function(guide) {
+          if(inherits(guide, "guide")) {
+            guide_geom(guide, layers, default_mapping)
+          } else {
+            guide
+          }
+        })
+    }
   },
 
   map_position = function(self, data) {

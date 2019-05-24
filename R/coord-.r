@@ -115,6 +115,10 @@ Coord <- ggproto("Coord",
     list()
   },
 
+  setup_panel_guides = function(scale_x, scale_y, panel_params, guides, params = list()) {
+    list()
+  },
+
   transform = function(data, range) NULL,
 
   distance = function(x, y, panel_params) NULL,
