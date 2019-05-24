@@ -7,6 +7,7 @@ strip_layout <- function(p) {
   data <- data$data
   theme <- plot_theme(plot)
 
+  layout$train_guides(plot$layers, plot$default_mapping, plot$guides)
   geom_grobs <- Map(function(l, d) l$draw_geom(d, layout), plot$layers, data)
 
   facet <- layout$render(geom_grobs, data, theme, plot$labels)
