@@ -113,6 +113,60 @@ CoordCartesian <- ggproto("CoordCartesian", Coord,
       train_cartesian(scale_x, self$limits$x, "x"),
       train_cartesian(scale_y, self$limits$y, "y")
     )
+  },
+
+  setup_panel_guides = function(self, scale_x, scale_y, panel_params, guides, params = list()) {
+
+    raw_scales <- list(x = scale_x, y = scale_y)
+
+    dummy_scale <- function(axis, aesthetic) {
+      if(!(paste0(axis, ".major") %in% names(panel_params))) return(NULL)
+      list(
+        get_breaks = function() panel_params[[paste0(axis, ".major")]],
+        map = function(breaks) panel_params[[paste0(axis, ".major")]],
+        get_labels = function(breaks) panel_params[[paste0(axis, ".labels")]],
+        aesthetics = aesthetic,
+        guide = raw_scales[[aesthetic]]$guide,
+        make_title = function(...) waiver()
+      )
+    }
+
+    axis_names <- c("x", "y", "x.sec", "y.sec")
+    aesthetic_names <- substr(axis_names, 1, 1)
+    scales <- Map(dummy_scale, axis_names, aesthetic_names)
+    no_scale <- vapply(scales, is.null, logical(1))
+    if(all(no_scale)) return(list())
+
+    panel_guides <- Map(guides_train_single, scales[!no_scale], aesthetic_names[!no_scale], list(guides))
+    panel_guides
+  },
+
+  render_axis_h = function(panel_params, theme) {
+    panel_guides <- panel_params$guides
+
+    arrange <- panel_params$x.arrange %||% c("secondary", "primary")
+    axis_modifiers <- c("secondary" = ".sec", "primary" = "")
+    guide_top <- panel_guides[[paste0("x", axis_modifiers[arrange[1]])]] %||% guide_none()
+    guide_bottom <- panel_guides[[paste0("x", axis_modifiers[arrange[2]])]] %||% guide_none()
+
+    list(
+      top = guide_gengrob(guide_top, theme, position = "top"),
+      bottom = guide_gengrob(guide_bottom, theme, position = "bottom")
+    )
+  },
+
+  render_axis_v = function(panel_params, theme) {
+    panel_guides <- panel_params$guides
+
+    arrange <- panel_params$y.arrange %||% c("primary", "secondary")
+    axis_modifiers <- c("secondary" = ".sec", "primary" = "")
+    guide_left <- panel_guides[[paste0("y", axis_modifiers[arrange[1]])]] %||% guide_none()
+    guide_right <- panel_guides[[paste0("y", axis_modifiers[arrange[2]])]] %||% guide_none()
+
+    list(
+      left = guide_gengrob(guide_left, theme, position = "left"),
+      right = guide_gengrob(guide_right, theme, position = "right")
+    )
   }
 )
 
