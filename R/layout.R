@@ -74,13 +74,24 @@ Layout <- ggproto("Layout", NULL,
       self$facet_params
     )
 
+    # inject guides into panel_params
+    panel_params <- lapply(seq_along(self$panel_params), function(i) {
+      guides <- self$panel_guides[[i]]
+      params <- self$panel_params[[i]]
+      if(length(guides) > 0) {
+        params[["guides"]] <- guides
+      }
+
+      params
+    })
+
     # Draw individual panels, then assemble into gtable
     panels <- lapply(seq_along(panels[[1]]), function(i) {
       panel <- lapply(panels, `[[`, i)
       panel <- c(facet_bg[i], panel, facet_fg[i])
 
-      coord_fg <- self$coord$render_fg(self$panel_params[[i]], theme)
-      coord_bg <- self$coord$render_bg(self$panel_params[[i]], theme)
+      coord_fg <- self$coord$render_fg(panel_params[[i]], theme)
+      coord_bg <- self$coord$render_bg(panel_params[[i]], theme)
       if (isTRUE(theme$panel.ontop)) {
         panel <- c(panel, list(coord_bg), list(coord_fg))
       } else {
@@ -97,7 +108,7 @@ Layout <- ggproto("Layout", NULL,
       self$layout,
       self$panel_scales_x,
       self$panel_scales_y,
-      self$panel_params,
+      panel_params,
       self$coord,
       data,
       theme,
@@ -115,7 +126,7 @@ Layout <- ggproto("Layout", NULL,
       self$layout,
       self$panel_scales_x,
       self$panel_scales_y,
-      self$panel_params,
+      panel_params,
       self$coord,
       data,
       theme,
