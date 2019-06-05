@@ -22,3 +22,10 @@ test_that("discrete ranges expand as expected", {
   r$train(letters)
   expect_equal(r$range, letters)
 })
+
+test_that("immutable ranges cannot be trained or reset", {
+  r <- immutable_range(c(0, 0))
+  expect_error(r$train(), "Cannot train")
+  expect_error(r$reset(), "Cannot reset")
+  expect_identical(r$range, c(0, 0))
+})

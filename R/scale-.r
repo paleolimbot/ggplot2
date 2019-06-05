@@ -60,6 +60,10 @@ Scale <- ggproto("Scale", NULL,
     self$range$reset()
   },
 
+  do_expand = function(self, expand = expand_scale()) {
+    stop("Not implemented", call. = FALSE)
+  },
+
   is_empty = function(self) {
     is.null(self$range$range) && is.null(self$limits)
   },
@@ -126,7 +130,7 @@ Scale <- ggproto("Scale", NULL,
   # The physical size of the scale.
   # This always returns a numeric vector of length 4, giving the physical
   # dimensions of a scale.
-  dimension = function(self, expand = c(0, 0, 0, 0)) {
+  dimension = function(self, expand = expand_scale()) {
     stop("Not implemented", call. = FALSE)
   },
 
@@ -145,6 +149,11 @@ Scale <- ggproto("Scale", NULL,
 
   get_labels = function(self, breaks = self$get_breaks()) {
     stop("Not implemented", call. = FALSE)
+  },
+
+  finalize = function(self) {
+    self$range <- immutable_range(self$range$range)
+    invisible()
   },
 
   # Each implementation of a Scale must implement a clone method that makes
@@ -207,6 +216,11 @@ ScaleContinuous <- ggproto("ScaleContinuous", Scale,
     self$range$train(x)
   },
 
+  do_expand = function(self, expand = expand_scale()) {
+    self$range$range <- self$dimension(expand)
+    invisible()
+  },
+
   transform = function(self, x) {
      new_x <- self$trans$transform(x)
      if (any(is.finite(x) != is.finite(new_x))) {
@@ -227,7 +241,7 @@ ScaleContinuous <- ggproto("ScaleContinuous", Scale,
     ifelse(!is.na(scaled), scaled, self$na.value)
   },
 
-  dimension = function(self, expand = c(0, 0, 0, 0)) {
+  dimension = function(self, expand = expand_scale()) {
     expand_range4(self$get_limits(), expand)
   },
 
@@ -400,7 +414,7 @@ ScaleDiscrete <- ggproto("ScaleDiscrete", Scale,
     }
   },
 
-  dimension = function(self, expand = c(0, 0, 0, 0)) {
+  dimension = function(self, expand = expand_scale()) {
     expand_range4(length(self$get_limits()), expand)
   },
 

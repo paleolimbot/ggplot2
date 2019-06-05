@@ -85,6 +85,11 @@ ScaleDiscretePosition <- ggproto("ScaleDiscretePosition", ScaleDiscrete,
     }
   },
 
+  do_expand = function(self, expand = expand_scale()) {
+    self$range_c$range <- self$dimension(expand)
+    invisible()
+  },
+
   get_limits = function(self) {
     if (self$is_empty()) return(c(0, 1))
 
@@ -108,7 +113,7 @@ ScaleDiscretePosition <- ggproto("ScaleDiscretePosition", ScaleDiscrete,
     }
   },
 
-  dimension = function(self, expand = c(0, 0, 0, 0)) {
+  dimension = function(self, expand = expand_scale()) {
     c_range <- self$range_c$range
     d_range <- self$get_limits()
 
@@ -128,6 +133,12 @@ ScaleDiscretePosition <- ggproto("ScaleDiscretePosition", ScaleDiscrete,
 
   get_breaks = function(self, limits = self$get_limits()) {
     ggproto_parent(ScaleDiscrete, self)$get_breaks(limits)
+  },
+
+  finalize = function(self) {
+    self$range <- immutable_range(self$get_limits())
+    self$range_c <- immutable_range(self$range_c$range)
+    invisible()
   },
 
   clone = function(self) {
