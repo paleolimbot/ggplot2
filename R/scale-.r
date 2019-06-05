@@ -210,7 +210,8 @@ ScaleContinuous <- ggproto("ScaleContinuous", Scale,
   },
 
   do_expand = function(self, expand = expand_scale(), dimension = NULL) {
-    self$range$range <- dimension %||% self$dimension(expand)
+    self$range$set_range(dimension %||% self$dimension(expand))
+    self$limits <- NULL
     invisible()
   },
 

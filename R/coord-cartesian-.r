@@ -100,21 +100,42 @@ CoordCartesian <- ggproto("CoordCartesian", Coord,
   },
 
   setup_panel_params = function(self, scale_x, scale_y, params = list()) {
-    train_cartesian <- function(scale, limits, name) {
-      range <- scale_range(scale, limits, self$expand)
 
-      out <- scale$break_info(range)
+    scale_x <- scale_view(scale_x, self$limits$x, self$expand)
+    scale_y <- scale_view(scale_y, self$limits$y, self$expand)
+
+    train_cartesian <- function(scale, name) {
+      out <- scale$break_info()
       out$arrange <- scale$axis_order()
       names(out) <- paste(name, names(out), sep = ".")
       out
     }
 
     c(
-      train_cartesian(scale_x, self$limits$x, "x"),
-      train_cartesian(scale_y, self$limits$y, "y")
+      list(scale_x = scale_x, scale_y = scale_y),
+      train_cartesian(scale_x, "x"),
+      train_cartesian(scale_y, "y")
     )
   }
 )
+
+scale_view <- function(scale, limits = NULL, expand = TRUE) {
+  scale <- scale$clone()
+  expansion <- if (expand) expand_default(scale) else expand_scale(0, 0)
+
+  if (is.null(limits)) {
+    scale$do_expand(expansion)
+  } else {
+    scale$do_expand(dimension = scale$transform(limits))
+    scale$do_expand(expansion)
+  }
+
+  ggproto(NULL, scale,
+          oob = function(x, ...) x,
+          squish = squish_infinite,
+          range = scale$range$finalize()
+  )
+}
 
 scale_range <- function(scale, limits = NULL, expand = TRUE) {
   expansion <- if (expand) expand_default(scale) else c(0, 0)
