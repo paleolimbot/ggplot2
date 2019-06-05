@@ -10,7 +10,7 @@ test_that("building a plot does not affect its scales", {
   expect_equal(length(p$scales$scales), 0)
 })
 
-test_that("finalized continuous position scales can be expanded in place", {
+test_that("continuous position scales can be expanded in place", {
   sc <- scale_x_continuous()
   sc$train(1:10)
   expect_equal(sc$dimension(), c(1, 10))
@@ -19,7 +19,7 @@ test_that("finalized continuous position scales can be expanded in place", {
   expect_equal(sc$get_limits(), c(0, 11))
 })
 
-test_that("finalized discrete position scales can be expanded in place", {
+test_that("discrete position scales can be expanded in place", {
   sd <- scale_x_discrete()
   sd$train(c("a", "b", "c"))
   expect_identical(sd$dimension(), c(1, 3))
@@ -30,21 +30,21 @@ test_that("finalized discrete position scales can be expanded in place", {
 test_that("finalized continuous position scales cannot be trained or reset", {
   sc <- scale_x_continuous()
   sc$train(1:10)
-  sc$finalize()
-  expect_error(sc$train(1:10), "Cannot train")
-  expect_error(sc$reset(), "Cannot reset")
-  expect_equal(sc$dimension(), c(1, 10))
-  expect_equal(sc$get_limits(), c(1, 10))
+  sc_final <- sc$finalize()
+  expect_error(sc_final$train(1:10), "Cannot train")
+  expect_error(sc_final$reset(), "Cannot reset")
+  expect_equal(sc_final$dimension(), c(1, 10))
+  expect_equal(sc_final$get_limits(), c(1, 10))
 })
 
 test_that("finalized discrete position scales cannot be trained or reset", {
   sd <- scale_x_discrete()
   sd$train(c("a", "b", "c"))
-  sd$finalize()
-  expect_error(sd$train(c("a", "b", "c")), "Cannot train")
-  expect_error(sd$reset(), "Cannot reset")
-  expect_equal(sd$get_limits(), c("a", "b", "c"))
-  expect_equal(sd$dimension(), c(1, 3))
+  sd_final <- sd$finalize()
+  expect_error(sd_final$train(c("a", "b", "c")), "Cannot train")
+  expect_error(sd_final$reset(), "Cannot reset")
+  expect_equal(sd_final$get_limits(), c("a", "b", "c"))
+  expect_equal(sd_final$dimension(), c(1, 3))
 })
 
 test_that("ranges update only for variables listed in aesthetics", {

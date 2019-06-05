@@ -12,6 +12,16 @@ Range <- ggproto("Range", NULL,
   range = NULL,
   reset = function(self) {
     self$range <- NULL
+  },
+  set_range = function(self, range) {
+    self$range <- range
+    invisible()
+  },
+  clone = function(self) {
+    ggproto(NULL, self, range = self$range)
+  },
+  finalize = function(self) {
+    immutable_range(self$range)
   }
 )
 
@@ -29,21 +39,18 @@ RangeContinuous <- ggproto("RangeContinuous", Range,
 
 RangeImmutable <- ggproto("RangeImmutable", Range,
   train = function(...) stop("Cannot train an immutable range", call. = FALSE),
-  reset = function(...) stop("Cannot reset an immutable range", call. = FALSE)
+  reset = function(...) stop("Cannot reset an immutable range", call. = FALSE),
+  set_range = function(...) stop("Cannot set range on an immutable range", call. = FALSE)
 )
 
-continuous_range <- function() {
-  ggproto(NULL, RangeContinuous)
+continuous_range <- function(range = NULL) {
+  ggproto(NULL, RangeContinuous, range = range)
 }
 
-discrete_range <- function() {
-  ggproto(NULL, RangeDiscrete)
+discrete_range <- function(range = NULL) {
+  ggproto(NULL, RangeDiscrete, range = range)
 }
 
-immutable_range <- function(range) {
-  ggproto(NULL, RangeImmutable,
-    range = range,
-    train = function(...) stop("Cannot train an immutable range", call. = FALSE),
-    reset = function(...) stop("Cannot reset an immutable range", call. = FALSE)
-  )
+immutable_range <- function(range = NULL) {
+  ggproto(NULL, RangeImmutable, range = range)
 }

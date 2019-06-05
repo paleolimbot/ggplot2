@@ -60,7 +60,7 @@ Scale <- ggproto("Scale", NULL,
     self$range$reset()
   },
 
-  do_expand = function(self, expand = expand_scale()) {
+  do_expand = function(self, expand = expand_scale(), dimension = NULL) {
     stop("Not implemented", call. = FALSE)
   },
 
@@ -128,7 +128,7 @@ Scale <- ggproto("Scale", NULL,
   },
 
   # The physical size of the scale.
-  # This always returns a numeric vector of length 4, giving the physical
+  # This always returns a numeric vector of length 2, giving the physical
   # dimensions of a scale.
   dimension = function(self, expand = expand_scale()) {
     stop("Not implemented", call. = FALSE)
@@ -152,14 +152,11 @@ Scale <- ggproto("Scale", NULL,
   },
 
   finalize = function(self) {
-    self$range <- immutable_range(self$range$range)
-    invisible()
+    ggproto(NULL, self, range = self$range$finalize())
   },
 
-  # Each implementation of a Scale must implement a clone method that makes
-  # copies of reference objecsts.
   clone = function(self) {
-    stop("Not implemented", call. = FALSE)
+    ggproto(NULL, self, range = self$range$clone())
   },
 
   break_info = function(self, range = NULL) {
@@ -216,8 +213,8 @@ ScaleContinuous <- ggproto("ScaleContinuous", Scale,
     self$range$train(x)
   },
 
-  do_expand = function(self, expand = expand_scale()) {
-    self$range$range <- self$dimension(expand)
+  do_expand = function(self, expand = expand_scale(), dimension = NULL) {
+    self$range$range <- dimension %||% self$dimension(expand)
     invisible()
   },
 
@@ -323,12 +320,6 @@ ScaleContinuous <- ggproto("ScaleContinuous", Scale,
       stop("Breaks and labels are different lengths")
     }
     labels
-  },
-
-  clone = function(self) {
-    new <- ggproto(NULL, self)
-    new$range <- continuous_range()
-    new
   },
 
   break_info = function(self, range = NULL) {
@@ -478,12 +469,6 @@ ScaleDiscrete <- ggproto("ScaleDiscrete", Scale,
         labels
       }
     }
-  },
-
-  clone = function(self) {
-    new <- ggproto(NULL, self)
-    new$range <- discrete_range()
-    new
   },
 
   break_info = function(self, range = NULL) {
