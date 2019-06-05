@@ -151,10 +151,6 @@ Scale <- ggproto("Scale", NULL,
     stop("Not implemented", call. = FALSE)
   },
 
-  finalize = function(self) {
-    ggproto(NULL, self, range = self$range$finalize())
-  },
-
   clone = function(self) {
     ggproto(NULL, self, range = self$range$clone())
   },
@@ -474,6 +470,7 @@ ScaleDiscrete <- ggproto("ScaleDiscrete", Scale,
   break_info = function(self, range = NULL) {
     # for discrete, limits != range
     limits <- self$get_limits()
+    range <- range %||% self$dimension()
 
     major <- self$get_breaks(limits)
     if (is.null(major)) {

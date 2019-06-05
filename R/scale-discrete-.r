@@ -135,14 +135,6 @@ ScaleDiscretePosition <- ggproto("ScaleDiscretePosition", ScaleDiscrete,
     ggproto_parent(ScaleDiscrete, self)$get_breaks(limits)
   },
 
-  finalize = function(self) {
-    ggproto(
-      NULL, self,
-      range = self$range$finalize(),
-      range_c = self$range_c$finalize()
-    )
-  },
-
   clone = function(self) {
     ggproto(
       NULL, self,
