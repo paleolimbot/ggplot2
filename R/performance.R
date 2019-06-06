@@ -2,7 +2,7 @@
 # No checking, recycling etc. unless asked for
 new_data_frame <- function(x = list(), n = NULL) {
   if (length(x) != 0 && is.null(names(x))) stop("Elements must be named", call. = FALSE)
-  lengths <- vapply(x, length, integer(1))
+  lengths <- vapply(x, vctrs::vec_size, integer(1))
   if (is.null(n)) {
     n <- if (length(x) == 0 || min(lengths) == 0) 0 else max(lengths)
   }

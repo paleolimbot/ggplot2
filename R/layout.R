@@ -279,7 +279,7 @@ scale_apply <- function(data, vars, method, scale_id, scales) {
 
   lapply(vars, function(var) {
     pieces <- lapply(seq_along(scales), function(i) {
-      scales[[i]][[method]](data[[var]][scale_index[[i]]])
+      scales[[i]][[method]](data[scale_index[[i]], var])
     })
     # Join pieces back together, if necessary
     if (!is.null(pieces)) {

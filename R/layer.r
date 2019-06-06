@@ -273,7 +273,7 @@ Layer <- ggproto("Layer", NULL,
     } else {
       evaled$PANEL <- data$PANEL
     }
-    evaled <- lapply(evaled, unname)
+    evaled <- lapply(evaled, function(x) if(!is.data.frame(x)) unname(x) else x)
     evaled <- as_gg_data_frame(evaled)
     evaled <- add_group(evaled)
     evaled
