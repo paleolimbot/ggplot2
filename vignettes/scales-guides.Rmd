@@ -16,6 +16,9 @@ knitr::opts_chunk$set(
 
 ```{r setup}
 library(ggplot2)
+library(grid)
+library(gtable)
+draw <- gridExtra::grid.arrange
 ```
 
 ## ggplot2 1d data spaces
@@ -152,8 +155,103 @@ p +
 Could handle this by:
 
 - dodging overlaps into multiple columns (user defined number of cols)
+
+```{r}
+dodgedLabelGrob <- function(labels, breaks, n_rows = 1) {
+  label_info <- tibble::tibble(
+    labels,
+    breaks,
+    row = rep_len(seq_len(n_rows), length(labels))
+  )
+
+  rows <- lapply(split(label_info, label_info$row), function(info) {
+    ggplot2:::titleGrob(
+      info$labels, x = info$breaks, y = unit(0.5, "npc"), 
+      hjust = NULL, vjust = NULL
+    )
+  })
+  heights <- do.call(unit.c, lapply(rows, grobHeight))
+  gtable_col("axis", rows, heights = heights)
+}
+
+test_dodge_n <- function(n, n_rows = 1) {
+  labels <- sprintf("%d,000,000", seq_len(n))
+  breaks <- scales::rescale(seq_len(n), to = c(-0.5, 0.5)) * 0.8 + 0.5
+  ticks <- pointsGrob(x = breaks, y = rep(0.5, n), default.units = "npc")
+
+  rbind(
+    gtable_col("ticks", list(ticks), heights = unit(1, "cm")),
+    dodgedLabelGrob(labels, breaks, n_rows)
+  )
+}
+
+draw(test_dodge_n(10, n_rows = 2))
+```
+
 - removing alternate labels (bisecting inwards...probably only makes sense for continuous scales, use `check.overlap` and change order)
-- using a different `breaks` function depending on overlap (would make the primary axis kind of like a secondary axis, since it would calculate breaks at render time)
+
+```{r}
+priority <- function(n) {
+  if(n <= 0) return(numeric(0))
+  
+  first <- 1
+  last <- n
+  middle <- (n + 1) %/% 2
+  
+  order <- c(
+    first, last, middle, 
+    first + priority(middle - first - 1), 
+    middle + priority(last - middle - 1)
+  )
+  unique(order)
+}
+
+priority(5)
+```
+
+```{r}
+test_overlap_n <- function(n) {
+  labels <- sprintf("%d,000,000", seq_len(n))
+  breaks <- scales::rescale(seq_len(n), to = c(-0.5, 0.5)) * 0.8 + 0.5
+  order <- priority(n)
+  gTree(children = gList(
+    pointsGrob(x = breaks[order], y = rep(0.5, n), default.units = "npc"),
+    textGrob(labels[order], x = breaks[order], check.overlap = TRUE, vjust = 2)
+  ))
+}
+
+draw(test_overlap_n(10))
+```
+
+- rotating labels
+
+https://github.com/paleolimbot/tidypaleo/blob/master/R/ggstrat-themes.R#L137-L156
+
+```{r}
+test_angle_n <- function(n, angle = 0) {
+  labels <- sprintf("%d,000,000", seq_len(n))
+  breaks <- scales::rescale(seq_len(n), to = c(-0.5, 0.5)) * 0.8 + 0.5
+  
+  hjust = if(angle > 0) 1 else if(angle < 0) 0 else 0.5
+  vjust = if(abs(angle) == 90) 0.5 else if(abs(angle) != 0) 1 else 1
+  
+  grobs <- list(
+    pointsGrob(x = breaks, y = rep(0.5, n), default.units = "npc"),
+    ggplot2:::titleGrob(
+      labels, x = breaks, y = rep(1, length(breaks)), 
+      hjust = hjust, angle = angle, 
+      vjust = vjust
+    )
+  )
+  
+  heights <- unit.c(unit(0.5, "cm"), grobHeight(grobs[[2]]))
+  gtable_col("axis", grobs, heights = heights)
+}
+
+draw(test_angle_n(10, 45))
+```
+
+
 
 ### Minor ticks
 
