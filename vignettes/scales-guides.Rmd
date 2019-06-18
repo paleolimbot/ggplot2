@@ -18,6 +18,42 @@ knitr::opts_chunk$set(
 library(ggplot2)
 ```
 
+## ggplot2 1d data spaces
+
+- Untransformed data space
+
+```{r}
+p <- ggplot(mpg, aes(class, cty)) + geom_boxplot()
+p
+```
+
+- Transformed data space
+
+```{r}
+p + scale_y_log10(breaks = seq(10, 35, 5), labels = format(log10(seq(10, 35, 5))))
+```
+
+- Mapped data space
+
+```{r}
+p + 
+  scale_y_log10(breaks = seq(10, 35, 5), labels = format(log10(seq(10, 35, 5)))) +
+  scale_x_discrete(labels = 1:7)
+```
+
+- Rescaled data space
+
+```{r}
+p + 
+  scale_y_log10(
+    breaks = seq(10, 35, 5), 
+    labels = format(scales::rescale(log10(seq(10, 35, 5)), from = c(0.9247512, 1.5735593)))
+  ) +
+  scale_x_discrete(
+    labels = format(scales::rescale(1:7, from = c(0.4, 7.6)))
+  )
+```
+
 ## Scales and guides
 
 ```{r}
@@ -59,8 +95,6 @@ Here, the position guides are:
 - y ("axis" guide with  `position = "left"`, with a transform applied in rescaled data space)\*
 - x + y ("target" guide with `position = "background"`)
 
-\* Scale-specific data spaces: untransformed data space, transformed data space, mapped data space, rescaled data space
-
 ## coord_trans()
 
 ```{r}
@@ -93,6 +127,19 @@ Here, the position guides are:
 - y ("axis" guide with `position = "right"` with a transform applied in untransformed data space that calculates breaks and labels at draw time)
 - x + y ("grid" guide with `position = "background"`)
 
+
+## Rotated coordinate systems
+
+```{r}
+ggspatial::load_longlake_data()
+ggplot(longlake_depthdf) +
+  geom_sf() +
+  coord_sf(crs = 26910) +
+  scale_x_continuous(expand = expand_scale(2)) 
+```
+
+- x + y (with `position = c("left", "bottom", "background")`)
+
 ## Things that ggplot2 might be able to do
 
 ### Smarter handling of overlappling labels
@@ -104,8 +151,8 @@ p +
 
 Could handle this by:
 
-- dodging overlaps into multiple columns
-- removing alternate labels (bisecting inwards...probably only makes sense for continuous scales)
+- dodging overlaps into multiple columns (user defined number of cols)
+- removing alternate labels (bisecting inwards...probably only makes sense for continuous scales, use `check.overlap` and change order)
 - using a different `breaks` function depending on overlap (would make the primary axis kind of like a secondary axis, since it would calculate breaks at render time)
 
 ### Minor ticks
@@ -160,5 +207,3 @@ knitr::include_graphics("heiarch_scale.png")
 ```{r}
 knitr::include_graphics("cor_clust.png")
 ```
-
-
