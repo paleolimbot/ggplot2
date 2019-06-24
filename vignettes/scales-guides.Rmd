@@ -21,40 +21,52 @@ library(gtable)
 draw <- gridExtra::grid.arrange
 ```
 
-## ggplot2 1d data spaces
+## ggplot2 data spaces
 
-- Untransformed data space
+- User data space (users)
 
 ```{r}
 p <- ggplot(mpg, aes(class, cty)) + geom_boxplot()
 p
 ```
 
-- Transformed data space
+- Transformed data space (some stats, scales)
 
 ```{r}
 p + scale_y_log10(breaks = seq(10, 35, 5), labels = format(log10(seq(10, 35, 5))))
 ```
 
-- Mapped data space
+- Mapped data space (some stats, geoms, coords)
 
 ```{r}
 p + 
   scale_y_log10(breaks = seq(10, 35, 5), labels = format(log10(seq(10, 35, 5)))) +
-  scale_x_discrete(labels = 1:7)
+  scale_x_discrete(labels = paste0(1:7, "L"))
 ```
 
-- Rescaled data space
+- Coordinate data space (grobs within the panel)
+
+```{r}
+p + 
+  scale_y_log10(breaks = seq(10, 35, 5), labels = format(-log10(seq(10, 35, 5)))) +
+  scale_x_discrete(labels = paste0("-", 1:7, "L")) +
+  # won't work unless you have remotes::install_github("tidyverse/ggplot2#3380")
+  coord_trans(y = "reverse", x = "reverse")
+```
+
+- Rescaled data space (grobs outside the panel)
 
 ```{r}
 p + 
   scale_y_log10(
     breaks = seq(10, 35, 5), 
-    labels = format(scales::rescale(log10(seq(10, 35, 5)), from = c(0.9247512, 1.5735593)))
+    labels = format(1 - scales::rescale(-log10(seq(10, 35, 5)), from = -c(0.9247512, 1.5735593)))
   ) +
   scale_x_discrete(
-    labels = format(scales::rescale(1:7, from = c(0.4, 7.6)))
-  )
+    labels = format(1 - scales::rescale(1:7, from = c(0.4, 7.6)))
+  ) +
+  # won't work unless you have remotes::install_github("tidyverse/ggplot2#3380")
+  coord_trans(y = "reverse", x = "reverse")
 ```
 
 ## Scales and guides
@@ -77,14 +89,27 @@ Scales:
 - **x (discrete)**
 - **y (continuous)**
 
-Guides:
+Plot guides:
 
 - colour (`guide_colourbar()` with `position = "right"`)
 - fill (`guide_legend()` with `position = "right"`)
 - shape (`guide_legend()` with `position = "right"`, merged with fill guide)
+
+Panel guides:
+
 - **x ("axis" guide with `position = "bottom"`)**
 - **y ("axis" guide with with `position = "left"`)**
 - **x and y ("grid" guide with with `position = "background"`)**
+
+```{r, eval=FALSE}
+... +
+  panel_guides(
+    guide_axis(aesthetics = "x", position = "bottom"),
+    guide_axis(aesthetics = "y", position = "left"),
+    guide_grid(aesthetics = c("x", "y"), position = "background")
+  )
+```
+
 
 ## Position guides and coordinate systems
 
@@ -92,24 +117,20 @@ Guides:
 p + coord_polar()
 ```
 
-Here, the position guides are:
+Here, the panel guides are:
 
-- x ("clock" guide with `position = "foreground"`)
-- y ("axis" guide with  `position = "left"`, with a transform applied in rescaled data space)\*
-- x + y ("target" guide with `position = "background"`)
+- x ("axis" (???) guide with `position = "foreground"`)
+- y ("axis" guide with  `position = "left"`, with a transform applied in rescaled data space)
+- x + y ("grid" guide with `position = "background"`)
 
-## coord_trans()
-
-```{r}
-p + 
-  coord_trans(y = "log10")
+```{r, eval=FALSE}
+... +
+  panel_guides(
+    guide_axis(aesthetics = "y", position = "bottom"),
+    guide_axis(aesthetics = "x", position = "foreground", override.aes = list(y = Inf)),
+    guide_grid(aesthetics = c("x", "y"), position = "background")
+  )
 ```
-
-Here, the position guides are:
-
-- x ("axis" guide with `position = "bottom"`)
-- y ("axis" guide with `position = "left"` with a transformation applied in transformed data space)
-- x + y ("grid" guide with `position = "background"`, with a transformation applied to "y" in transformed data space)
 
 ## Second axes
 
@@ -127,9 +148,18 @@ Here, the position guides are:
 
 - x ("axis" guide with `position = "bottom"`)
 - y ("axis" guide with `position = "left"`)
-- y ("axis" guide with `position = "right"` with a transform applied in untransformed data space that calculates breaks and labels at draw time)
+- y ("axis" guide with `position = "right"` with a transform applied in user data space)
 - x + y ("grid" guide with `position = "background"`)
 
+```{r, eval=FALSE}
+... +
+  panel_guides(
+    guide_axis(aesthetics = "x", position = "bottom"),
+    guide_axis(aesthetics = "y", position = "left", trans = identity_trans()),,
+    guide_axis(aesthetics = "y", position = "right", trans = as_lazy_trans(~235 / .)),
+    guide_grid(aesthetics = c("x", "y"), position = "background")
+  )
+```
 
 ## Rotated coordinate systems
 
@@ -141,7 +171,17 @@ ggplot(longlake_depthdf) +
   scale_x_continuous(expand = expand_scale(2)) 
 ```
 
-- x + y (with `position = c("left", "bottom", "background")`)
+- x + y ("graticule" guide with `position = c("left", "bottom", "background")`)
+
+```{r, eval=FALSE}
+... +
+  panel_guides(
+    guide_graticule(
+      aesthetics = c("x", "y"),
+      position = c("background", "left", "bottom")
+    )
+  )
+```
 
 ## Things that ggplot2 might be able to do
 
@@ -152,106 +192,12 @@ p +
   scale_y_continuous(breaks = scales::extended_breaks(n = 100))
 ```
 
-Could handle this by:
-
-- dodging overlaps into multiple columns (user defined number of cols)
-
-```{r}
-dodgedLabelGrob <- function(labels, breaks, n_rows = 1) {
-  label_info <- tibble::tibble(
-    labels,
-    breaks,
-    row = rep_len(seq_len(n_rows), length(labels))
+```{r, eval=FALSE}
+... +
+  panel_guides(
+    y = guide_axis(angle = ..., check.overlap = ..., n_dodge = ...)
   )
-
-  rows <- lapply(split(label_info, label_info$row), function(info) {
-    ggplot2:::titleGrob(
-      info$labels, x = info$breaks, y = unit(0.5, "npc"), 
-      hjust = NULL, vjust = NULL
-    )
-  })
-  heights <- do.call(unit.c, lapply(rows, grobHeight))
-  gtable_col("axis", rows, heights = heights)
-}
-
-test_dodge_n <- function(n, n_rows = 1) {
-  labels <- sprintf("%d,000,000", seq_len(n))
-  breaks <- scales::rescale(seq_len(n), to = c(-0.5, 0.5)) * 0.8 + 0.5
-  ticks <- pointsGrob(x = breaks, y = rep(0.5, n), default.units = "npc")
-
-  rbind(
-    gtable_col("ticks", list(ticks), heights = unit(1, "cm")),
-    dodgedLabelGrob(labels, breaks, n_rows)
-  )
-}
-
-draw(test_dodge_n(10, n_rows = 2))
 ```
-
-- removing alternate labels (bisecting inwards...probably only makes sense for continuous scales, use `check.overlap` and change order)
-
-```{r}
-priority <- function(n) {
-  if(n <= 0) return(numeric(0))
-  
-  first <- 1
-  last <- n
-  middle <- (n + 1) %/% 2
-  
-  order <- c(
-    first, last, middle, 
-    first + priority(middle - first - 1), 
-    middle + priority(last - middle - 1)
-  )
-  unique(order)
-}
-
-priority(5)
-```
-
-```{r}
-test_overlap_n <- function(n) {
-  labels <- sprintf("%d,000,000", seq_len(n))
-  breaks <- scales::rescale(seq_len(n), to = c(-0.5, 0.5)) * 0.8 + 0.5
-  order <- priority(n)
-  gTree(children = gList(
-    pointsGrob(x = breaks[order], y = rep(0.5, n), default.units = "npc"),
-    textGrob(labels[order], x = breaks[order], check.overlap = TRUE, vjust = 2)
-  ))
-}
-
-draw(test_overlap_n(10))
-```
-
-- rotating labels
-
-https://github.com/paleolimbot/tidypaleo/blob/master/R/ggstrat-themes.R#L137-L156
-
-```{r}
-test_angle_n <- function(n, angle = 0) {
-  labels <- sprintf("%d,000,000", seq_len(n))
-  breaks <- scales::rescale(seq_len(n), to = c(-0.5, 0.5)) * 0.8 + 0.5
-  
-  hjust = if(angle > 0) 1 else if(angle < 0) 0 else 0.5
-  vjust = if(abs(angle) == 90) 0.5 else if(abs(angle) != 0) 1 else 1
-  
-  grobs <- list(
-    pointsGrob(x = breaks, y = rep(0.5, n), default.units = "npc"),
-    ggplot2:::titleGrob(
-      labels, x = breaks, y = rep(1, length(breaks)), 
-      hjust = hjust, angle = angle, 
-      vjust = vjust
-    )
-  )
-  
-  heights <- unit.c(unit(0.5, "cm"), grobHeight(grobs[[2]]))
-  gtable_col("axis", grobs, heights = heights)
-}
-
-draw(test_angle_n(10, 45))
-```
-
-
 
 ### Minor ticks
 
@@ -262,6 +208,10 @@ p +
   theme_classic()
 ```
 
+```{r, eval=FALSE}
+... +
+  theme(axis.ticks.minor.length = unit(0.2, "pt"))
+```
 
 ### Manual specifiation of tick locations/labels
 
@@ -269,14 +219,11 @@ p +
 knitr::include_graphics("right_axis_values.png")
 ```
 
-Might be nice to specify in any of the scale data spaces...original data space here, but transformed data space for something calculated from the layers, mapped for something involving pre coordinate system transformation, or rescaled for putting something at the top/bottom/middle.
-
-### Custom tick marks?
-
-```{r}
-p +
-  annotate("point", x = -Inf, y = seq(10, 35, by = 5)) +
-  coord_cartesian(clip = "off")
+```{r, eval=FALSE}
+... +
+  panel_guides(
+    guide_axis_manual("y", values = ..., labels = ..., gpar = tibble(...))
+  )
 ```
 
 ### Aesthetics applied to tick marks/labels
@@ -292,9 +239,15 @@ ggplot(mpg, aes(class, hwy, col = class)) +
 knitr::include_graphics("multiple_posigion_guides.png")
 ```
 
-### Heiarchical scales/axis guides?
+```{r, eval=FALSE}
+... +
+  panel_guides(
+    guide_axis("y", position = "left"),
+    guide_axis("y", position = "left", trans = age_depth_trans(...))
+  )
+```
 
-(need to find a better example) 
+### Heiarchical scales/axis guides?
 
 ```{r}
 knitr::include_graphics("heiarch_scale.png")
