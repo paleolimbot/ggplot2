@@ -6,66 +6,95 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>2d contours of a 3d surface — geom_contour • ggplot2</title>
+<title>2D contours of a 3D surface — geom_contour • ggplot2</title>
+
+<!-- favicons -->
+<link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
+<link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png" />
+<link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png" />
+<link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png" />
+<link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png" />
 
 <!-- jquery -->
-<script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 
 <!-- Bootstrap -->
 <link href="../tidyverse.css" rel="stylesheet">
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
+
+<!-- bootstrap-toc -->
+<link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script>
 
 <!-- Font Awesome icons -->
-<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
 
-<!-- sticky kit -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
+<!-- headroom.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../pkgdown.js"></script>
 <link href="../tidyverse-2.css" rel="stylesheet">
 
+<!--optional theme-->
+<link href="../.css" rel="stylesheet">
 
 
-<meta property="og:title" content="2d contours of a 3d surface — geom_contour" />
 
-<meta property="og:description" content="ggplot2 can not draw true 3d surfaces, but you can use geom_contour
-and geom_tile() to visualise 3d surfaces in 2d. To be a valid
-surface, the data must contain only a single row for each unique combination
-of the variables mapped to the x and y aesthetics. Contouring
-tends to work best when x and y form a (roughly) evenly
-spaced grid. If your data is not evenly spaced, you may want to interpolate
-to a grid before visualising." />
+<!-- docsearch -->
+<script src="../docsearch.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.1/docsearch.min.css" integrity="sha256-QOSRU/ra9ActyXkIBbiIB144aDBdtvXBcNc3OTNuX/Q=" crossorigin="anonymous" />
+<link href="../docsearch.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script>
 
+
+<meta property="og:title" content="2D contours of a 3D surface — geom_contour" />
+<meta property="og:description" content="ggplot2 can not draw true 3D surfaces, but you can use geom_contour(),
+geom_contour_filled(), and geom_tile() to visualise 3D surfaces in 2D. To
+specify a valid surface, the data must contain x, y, and z coordinates,
+and each unique combination of x and y can appear at most once.
+Contouring requires that the points can be rearranged so that the z values
+form a matrix, with rows corresponding to unique x values, and columns
+corresponding to unique y values. Missing entries are allowed, but contouring
+will only be done on cells of the grid with all four z values present. If
+your data is irregular, you can interpolate to a grid before visualising
+using the interp::interp() function from the interp package
+(or one of the interpolating functions from the akima package.)" />
 <meta property="og:image" content="https://ggplot2.tidyverse.org/logo.png" />
 <meta name="twitter:card" content="summary" />
+
 
 <meta name="robots" content="noindex">
 
 <!-- mathjax -->
-<script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script>
 
 <!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
 
-<!-- google analytics -->
+<!-- Global site tag (gtag.js) - Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-115082821-1"></script>
 <script>
- window.dataLayer = window.dataLayer || [];
- function gtag(){dataLayer.push(arguments);}
- gtag('js', new Date());
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
 
- gtag('config', 'UA-115082821-1');
+  gtag('config', 'UA-115082821-1');
 </script>
+
   </head>
 
-  <body>
+  <body data-spy="scroll" data-target="#toc">
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -80,31 +109,17 @@ to a grid before visualising." />
 
       <div class="navbar-brand-container">
         <a class="navbar-brand" href="../index.html">ggplot2</a>
-        <div class="info">
+        <div class="info hidden-xs hidden-sm">
           <span class="partof">part of the <a href="https://tidyverse.org">tidyverse</a></span>
-          <span class="version version-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">3.1.0.9000</span>
+          <span class="version version-danger" data-toggle="tooltip" data-placement="bottom" title="In-development version">3.3.3.9000</span>
         </div>
       </div>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav navbar-right">
+        
         <li>
   <a href="../reference/index.html">Reference</a>
-</li>
-<li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    Articles
-     
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu">
-    <li>
-      <a href="../articles/ggplot2-specs.html">Aesthetic specifications</a>
-    </li>
-    <li>
-      <a href="../articles/extending-ggplot2.html">Extending ggplot2</a>
-    </li>
-  </ul>
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
@@ -113,7 +128,13 @@ to a grid before visualising." />
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
-    <li class="dropdown-header">Release notes</li>
+    <li class="dropdown-header">Releases</li>
+    <li>
+      <a href="https://www.tidyverse.org/blog/2020/03/ggplot2-3-3-0/">Version 3.3.0</a>
+    </li>
+    <li>
+      <a href="https://www.tidyverse.org/articles/2019/06/ggplot2-3-2-0/">Version 3.2.0</a>
+    </li>
     <li>
       <a href="https://www.tidyverse.org/articles/2018/10/ggplot2-3-1-0/">Version 3.1.0</a>
     </li>
@@ -134,54 +155,159 @@ to a grid before visualising." />
     </li>
     <li class="divider"></li>
     <li>
-      <a href="../news/index.html">Change log</a>
+      <a href="../news/index.html">Changelog</a>
     </li>
   </ul>
 </li>
-        <li>
-  <a href="https://github.com/tidyverse/ggplot2">
-    <span class="fa fa-github fa-lg"></span>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/ggplot2-specs.html">Aesthetic specifications</a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Developer</li>
+    <li>
+      <a href="../articles/extending-ggplot2.html">Extending ggplot2</a>
+    </li>
+    <li>
+      <a href="../articles/ggplot2-in-packages.html">Using ggplot2 in packages</a>
+    </li>
+    <li>
+      <a href="../articles/profiling.html">Profiling Performance</a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">FAQ</li>
+    <li>
+      <a href="../articles/articles/faq-axes.html">FAQ: Axes</a>
+    </li>
+    <li>
+      <a href="../articles/articles/faq-faceting.html">FAQ: Faceting</a>
+    </li>
+    <li>
+      <a href="../articles/articles/faq-customising.html">FAQ: Customising</a>
+    </li>
+    <li>
+      <a href="../articles/articles/faq-annotation.html">FAQ: Annotation</a>
+    </li>
+    <li>
+      <a href="../articles/articles/faq-reordering.html">FAQ: Reordering</a>
+    </li>
+    <li>
+      <a href="../articles/articles/faq-bars.html">FAQ: Barplots</a>
+    </li>
+  </ul>
+</li>
+<li>
+  <a href="https://exts.ggplot2.tidyverse.org/gallery/">Extensions</a>
+</li>
+<li>
+  <a href="https://github.com/tidyverse/ggplot2/">
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
       </ul>
+      
+      <form class="navbar-form navbar-right" role="search">
+        <div class="form-group">
+          <input type="search" class="form-control" name="search-input" id="search-input" placeholder="Search..." aria-label="Search for..." autocomplete="off">
+        </div>
+      </form>
       
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
 
       
+
       </header>
 
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>2d contours of a 3d surface</h1>
+    <h1>2D contours of a 3D surface</h1>
     <small class="dont-index">Source: <a href='https://github.com/tidyverse/ggplot2/blob/master/R/geom-contour.r'><code>R/geom-contour.r</code></a>, <a href='https://github.com/tidyverse/ggplot2/blob/master/R/stat-contour.r'><code>R/stat-contour.r</code></a></small>
     <div class="hidden name"><code>geom_contour.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    
-    <p>ggplot2 can not draw true 3d surfaces, but you can use <code>geom_contour</code>
-and <code><a href='geom_tile.html'>geom_tile()</a></code> to visualise 3d surfaces in 2d. To be a valid
-surface, the data must contain only a single row for each unique combination
-of the variables mapped to the <code>x</code> and <code>y</code> aesthetics. Contouring
-tends to work best when <code>x</code> and <code>y</code> form a (roughly) evenly
-spaced grid. If your data is not evenly spaced, you may want to interpolate
-to a grid before visualising.</p>
-    
+    <p>ggplot2 can not draw true 3D surfaces, but you can use <code>geom_contour()</code>,
+<code>geom_contour_filled()</code>, and <code><a href='geom_raster.html'>geom_tile()</a></code> to visualise 3D surfaces in 2D. To
+specify a valid surface, the data must contain <code>x</code>, <code>y</code>, and <code>z</code> coordinates,
+and each unique combination of <code>x</code> and <code>y</code> can appear at most once.
+Contouring requires that the points can be rearranged so that the <code>z</code> values
+form a matrix, with rows corresponding to unique <code>x</code> values, and columns
+corresponding to unique <code>y</code> values. Missing entries are allowed, but contouring
+will only be done on cells of the grid with all four <code>z</code> values present. If
+your data is irregular, you can interpolate to a grid before visualising
+using the <code><a href='https://rdrr.io/pkg/interp/man/interp.html'>interp::interp()</a></code> function from the <code>interp</code> package
+(or one of the interpolating functions from the <code>akima</code> package.)</p>
     </div>
 
-    <pre class="usage"><span class='fu'>geom_contour</span>(<span class='kw'>mapping</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>stat</span> <span class='kw'>=</span> <span class='st'>"contour"</span>,
-  <span class='kw'>position</span> <span class='kw'>=</span> <span class='st'>"identity"</span>, <span class='no'>...</span>, <span class='kw'>lineend</span> <span class='kw'>=</span> <span class='st'>"butt"</span>, <span class='kw'>linejoin</span> <span class='kw'>=</span> <span class='st'>"round"</span>,
-  <span class='kw'>linemitre</span> <span class='kw'>=</span> <span class='fl'>10</span>, <span class='kw'>na.rm</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>show.legend</span> <span class='kw'>=</span> <span class='fl'>NA</span>,
-  <span class='kw'>inherit.aes</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+    <pre class="usage"><span class='fu'>geom_contour</span><span class='op'>(</span>
+  mapping <span class='op'>=</span> <span class='cn'>NULL</span>,
+  data <span class='op'>=</span> <span class='cn'>NULL</span>,
+  stat <span class='op'>=</span> <span class='st'>"contour"</span>,
+  position <span class='op'>=</span> <span class='st'>"identity"</span>,
+  <span class='va'>...</span>,
+  bins <span class='op'>=</span> <span class='cn'>NULL</span>,
+  binwidth <span class='op'>=</span> <span class='cn'>NULL</span>,
+  breaks <span class='op'>=</span> <span class='cn'>NULL</span>,
+  lineend <span class='op'>=</span> <span class='st'>"butt"</span>,
+  linejoin <span class='op'>=</span> <span class='st'>"round"</span>,
+  linemitre <span class='op'>=</span> <span class='fl'>10</span>,
+  na.rm <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  show.legend <span class='op'>=</span> <span class='cn'>NA</span>,
+  inherit.aes <span class='op'>=</span> <span class='cn'>TRUE</span>
+<span class='op'>)</span>
 
-<span class='fu'>stat_contour</span>(<span class='kw'>mapping</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>geom</span> <span class='kw'>=</span> <span class='st'>"contour"</span>,
-  <span class='kw'>position</span> <span class='kw'>=</span> <span class='st'>"identity"</span>, <span class='no'>...</span>, <span class='kw'>na.rm</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>show.legend</span> <span class='kw'>=</span> <span class='fl'>NA</span>,
-  <span class='kw'>inherit.aes</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
-    
+<span class='fu'>geom_contour_filled</span><span class='op'>(</span>
+  mapping <span class='op'>=</span> <span class='cn'>NULL</span>,
+  data <span class='op'>=</span> <span class='cn'>NULL</span>,
+  stat <span class='op'>=</span> <span class='st'>"contour_filled"</span>,
+  position <span class='op'>=</span> <span class='st'>"identity"</span>,
+  <span class='va'>...</span>,
+  bins <span class='op'>=</span> <span class='cn'>NULL</span>,
+  binwidth <span class='op'>=</span> <span class='cn'>NULL</span>,
+  breaks <span class='op'>=</span> <span class='cn'>NULL</span>,
+  na.rm <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  show.legend <span class='op'>=</span> <span class='cn'>NA</span>,
+  inherit.aes <span class='op'>=</span> <span class='cn'>TRUE</span>
+<span class='op'>)</span>
+
+<span class='fu'>stat_contour</span><span class='op'>(</span>
+  mapping <span class='op'>=</span> <span class='cn'>NULL</span>,
+  data <span class='op'>=</span> <span class='cn'>NULL</span>,
+  geom <span class='op'>=</span> <span class='st'>"contour"</span>,
+  position <span class='op'>=</span> <span class='st'>"identity"</span>,
+  <span class='va'>...</span>,
+  bins <span class='op'>=</span> <span class='cn'>NULL</span>,
+  binwidth <span class='op'>=</span> <span class='cn'>NULL</span>,
+  breaks <span class='op'>=</span> <span class='cn'>NULL</span>,
+  na.rm <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  show.legend <span class='op'>=</span> <span class='cn'>NA</span>,
+  inherit.aes <span class='op'>=</span> <span class='cn'>TRUE</span>
+<span class='op'>)</span>
+
+<span class='fu'>stat_contour_filled</span><span class='op'>(</span>
+  mapping <span class='op'>=</span> <span class='cn'>NULL</span>,
+  data <span class='op'>=</span> <span class='cn'>NULL</span>,
+  geom <span class='op'>=</span> <span class='st'>"contour_filled"</span>,
+  position <span class='op'>=</span> <span class='st'>"identity"</span>,
+  <span class='va'>...</span>,
+  bins <span class='op'>=</span> <span class='cn'>NULL</span>,
+  binwidth <span class='op'>=</span> <span class='cn'>NULL</span>,
+  breaks <span class='op'>=</span> <span class='cn'>NULL</span>,
+  na.rm <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  show.legend <span class='op'>=</span> <span class='cn'>NA</span>,
+  inherit.aes <span class='op'>=</span> <span class='cn'>TRUE</span>
+<span class='op'>)</span></pre>
+
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
@@ -203,7 +329,8 @@ data. All objects will be fortified to produce a data frame. See
 <code><a href='fortify.html'>fortify()</a></code> for which variables will be created.</p>
 <p>A <code>function</code> will be called with a single argument,
 the plot data. The return value must be a <code>data.frame</code>, and
-will be used as the layer data.</p></td>
+will be used as the layer data. A <code>function</code> can be created
+from a <code>formula</code> (e.g. <code>~ head(.x, 10)</code>).</p></td>
     </tr>
     <tr>
       <th>stat</th>
@@ -221,6 +348,20 @@ a call to a position adjustment function.</p></td>
 often aesthetics, used to set an aesthetic to a fixed value, like
 <code>colour = "red"</code> or <code>size = 3</code>. They may also be parameters
 to the paired geom/stat.</p></td>
+    </tr>
+    <tr>
+      <th>bins</th>
+      <td><p>Number of contour bins. Overridden by <code>binwidth</code>.</p></td>
+    </tr>
+    <tr>
+      <th>binwidth</th>
+      <td><p>The width of the contour bins. Overridden by <code>breaks</code>.</p></td>
+    </tr>
+    <tr>
+      <th>breaks</th>
+      <td><p>Numeric vector to set the contour breaks. Overrides <code>binwidth</code>
+and <code>bins</code>. By default, this is a vector of length ten with <code><a href='https://rdrr.io/r/base/pretty.html'>pretty()</a></code>
+breaks.</p></td>
     </tr>
     <tr>
       <th>lineend</th>
@@ -259,11 +400,12 @@ the default plot specification, e.g. <code><a href='borders.html'>borders()</a><
       <td><p>The geometric object to use display the data</p></td>
     </tr>
     </table>
-    
+
     <h2 class="hasAnchor" id="aesthetics"><a class="anchor" href="#aesthetics"></a>Aesthetics</h2>
 
     
-    <p><code>geom_contour()</code> understands the following aesthetics (required aesthetics are in bold):</p><ul>
+
+<p><code>geom_contour()</code> understands the following aesthetics (required aesthetics are in bold):</p><ul>
 <li><p><strong><code>x</code></strong></p></li>
 <li><p><strong><code>y</code></strong></p></li>
 <li><p><code>alpha</code></p></li>
@@ -273,53 +415,111 @@ the default plot specification, e.g. <code><a href='borders.html'>borders()</a><
 <li><p><code>size</code></p></li>
 <li><p><code>weight</code></p></li>
 </ul><p>Learn more about setting these aesthetics in <code><a href='../articles/ggplot2-specs.html'>vignette("ggplot2-specs")</a></code>.</p>
-    
+
+<p><code>geom_contour_filled()</code> understands the following aesthetics (required aesthetics are in bold):</p><ul>
+<li><p><strong><code>x</code></strong></p></li>
+<li><p><strong><code>y</code></strong></p></li>
+<li><p><code>alpha</code></p></li>
+<li><p><code>colour</code></p></li>
+<li><p><code>fill</code></p></li>
+<li><p><code>group</code></p></li>
+<li><p><code>linetype</code></p></li>
+<li><p><code>size</code></p></li>
+<li><p><code>subgroup</code></p></li>
+</ul><p>Learn more about setting these aesthetics in <code><a href='../articles/ggplot2-specs.html'>vignette("ggplot2-specs")</a></code>.</p>
+
+<p><code>stat_contour()</code> understands the following aesthetics (required aesthetics are in bold):</p><ul>
+<li><p><strong><code>x</code></strong></p></li>
+<li><p><strong><code>y</code></strong></p></li>
+<li><p><strong><code>z</code></strong></p></li>
+<li><p><code>group</code></p></li>
+<li><p><code>order</code></p></li>
+</ul><p>Learn more about setting these aesthetics in <code><a href='../articles/ggplot2-specs.html'>vignette("ggplot2-specs")</a></code>.</p>
+
+<p><code>stat_contour_filled()</code> understands the following aesthetics (required aesthetics are in bold):</p><ul>
+<li><p><strong><code>x</code></strong></p></li>
+<li><p><strong><code>y</code></strong></p></li>
+<li><p><strong><code>z</code></strong></p></li>
+<li><p><code>fill</code></p></li>
+<li><p><code>group</code></p></li>
+<li><p><code>order</code></p></li>
+</ul><p>Learn more about setting these aesthetics in <code><a href='../articles/ggplot2-specs.html'>vignette("ggplot2-specs")</a></code>.</p>
     <h2 class="hasAnchor" id="computed-variables"><a class="anchor" href="#computed-variables"></a>Computed variables</h2>
 
     
-    <dl class='dl-horizontal'>
-<dt>level</dt><dd><p>height of contour</p></dd>
-<dt>nlevel</dt><dd><p>height of contour, scaled to maximum of 1</p></dd>
-<dt>piece</dt><dd><p>contour piece (an integer)</p></dd>
+
+<p>The computed variables differ somewhat for contour lines (computed by
+<code>stat_contour()</code>) and contour bands (filled contours, computed by <code>stat_contour_filled()</code>).
+The variables <code>nlevel</code> and <code>piece</code> are available for both, whereas <code>level_low</code>, <code>level_high</code>,
+and <code>level_mid</code> are only available for bands. The variable <code>level</code> is a numeric or a factor
+depending on whether lines or bands are calculated.</p><dl>
+<dt><code>level</code></dt><dd><p>Height of contour. For contour lines, this is numeric vector that
+represents bin boundaries. For contour bands, this is an ordered factor that
+represents bin ranges.</p></dd>
+<dt><code>level_low</code>, <code>level_high</code>, <code>level_mid</code></dt><dd><p>(contour bands only) Lower and upper
+bin boundaries for each band, as well the mid point between the boundaries.</p></dd>
+<dt><code>nlevel</code></dt><dd><p>Height of contour, scaled to maximum of 1.</p></dd>
+<dt><code>piece</code></dt><dd><p>Contour piece (an integer).</p></dd>
+
 </dl>
-    
+
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><code><a href='geom_density_2d.html'>geom_density_2d()</a></code>: 2d density contours</p></div>
-    
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'>#' # Basic plot</span>
-<span class='no'>v</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='ggplot.html'>ggplot</a></span>(<span class='no'>faithfuld</span>, <span class='fu'><a href='aes.html'>aes</a></span>(<span class='no'>waiting</span>, <span class='no'>eruptions</span>, <span class='kw'>z</span> <span class='kw'>=</span> <span class='no'>density</span>))
-<span class='no'>v</span> + <span class='fu'>geom_contour</span>()</div><div class='img'><img src='geom_contour-1.png' alt='' width='700' height='433' /></div><div class='input'>
+    <pre class="examples"><div class='input'><span class='co'># Basic plot</span>
+<span class='va'>v</span> <span class='op'>&lt;-</span> <span class='fu'><a href='ggplot.html'>ggplot</a></span><span class='op'>(</span><span class='va'>faithfuld</span>, <span class='fu'><a href='aes.html'>aes</a></span><span class='op'>(</span><span class='va'>waiting</span>, <span class='va'>eruptions</span>, z <span class='op'>=</span> <span class='va'>density</span><span class='op'>)</span><span class='op'>)</span>
+<span class='va'>v</span> <span class='op'>+</span> <span class='fu'>geom_contour</span><span class='op'>(</span><span class='op'>)</span>
+</div><div class='img'><img src='geom_contour-1.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'># Or compute from raw data</span>
-<span class='fu'><a href='ggplot.html'>ggplot</a></span>(<span class='no'>faithful</span>, <span class='fu'><a href='aes.html'>aes</a></span>(<span class='no'>waiting</span>, <span class='no'>eruptions</span>)) +
-  <span class='fu'><a href='geom_density_2d.html'>geom_density_2d</a></span>()</div><div class='img'><img src='geom_contour-2.png' alt='' width='700' height='433' /></div><div class='input'>
-</div><div class='input'><span class='co'># Setting bins creates evenly spaced contours in the range of the data</span>
-<span class='no'>v</span> + <span class='fu'>geom_contour</span>(<span class='kw'>bins</span> <span class='kw'>=</span> <span class='fl'>2</span>)</div><div class='img'><img src='geom_contour-3.png' alt='' width='700' height='433' /></div><div class='input'><span class='no'>v</span> + <span class='fu'>geom_contour</span>(<span class='kw'>bins</span> <span class='kw'>=</span> <span class='fl'>10</span>)</div><div class='img'><img src='geom_contour-4.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='fu'><a href='ggplot.html'>ggplot</a></span><span class='op'>(</span><span class='va'>faithful</span>, <span class='fu'><a href='aes.html'>aes</a></span><span class='op'>(</span><span class='va'>waiting</span>, <span class='va'>eruptions</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'><a href='geom_density_2d.html'>geom_density_2d</a></span><span class='op'>(</span><span class='op'>)</span>
+</div><div class='img'><img src='geom_contour-2.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='co'># \donttest{</span>
+<span class='co'># use geom_contour_filled() for filled contours</span>
+<span class='va'>v</span> <span class='op'>+</span> <span class='fu'>geom_contour_filled</span><span class='op'>(</span><span class='op'>)</span>
+</div><div class='img'><img src='geom_contour-3.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='co'># Setting bins creates evenly spaced contours in the range of the data</span>
+<span class='va'>v</span> <span class='op'>+</span> <span class='fu'>geom_contour</span><span class='op'>(</span>bins <span class='op'>=</span> <span class='fl'>3</span><span class='op'>)</span>
+</div><div class='img'><img src='geom_contour-4.png' alt='' width='700' height='433' /></div><div class='input'><span class='va'>v</span> <span class='op'>+</span> <span class='fu'>geom_contour</span><span class='op'>(</span>bins <span class='op'>=</span> <span class='fl'>5</span><span class='op'>)</span>
+</div><div class='img'><img src='geom_contour-5.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'># Setting binwidth does the same thing, parameterised by the distance</span>
 <span class='co'># between contours</span>
-<span class='no'>v</span> + <span class='fu'>geom_contour</span>(<span class='kw'>binwidth</span> <span class='kw'>=</span> <span class='fl'>0.01</span>)</div><div class='img'><img src='geom_contour-5.png' alt='' width='700' height='433' /></div><div class='input'><span class='no'>v</span> + <span class='fu'>geom_contour</span>(<span class='kw'>binwidth</span> <span class='kw'>=</span> <span class='fl'>0.001</span>)</div><div class='img'><img src='geom_contour-6.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='va'>v</span> <span class='op'>+</span> <span class='fu'>geom_contour</span><span class='op'>(</span>binwidth <span class='op'>=</span> <span class='fl'>0.01</span><span class='op'>)</span>
+</div><div class='img'><img src='geom_contour-6.png' alt='' width='700' height='433' /></div><div class='input'><span class='va'>v</span> <span class='op'>+</span> <span class='fu'>geom_contour</span><span class='op'>(</span>binwidth <span class='op'>=</span> <span class='fl'>0.001</span><span class='op'>)</span>
+</div><div class='img'><img src='geom_contour-7.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'># Other parameters</span>
-<span class='no'>v</span> + <span class='fu'>geom_contour</span>(<span class='fu'><a href='aes.html'>aes</a></span>(<span class='kw'>colour</span> <span class='kw'>=</span> <span class='fu'><a href='stat.html'>stat</a></span>(<span class='no'>level</span>)))</div><div class='img'><img src='geom_contour-7.png' alt='' width='700' height='433' /></div><div class='input'><span class='no'>v</span> + <span class='fu'>geom_contour</span>(<span class='kw'>colour</span> <span class='kw'>=</span> <span class='st'>"red"</span>)</div><div class='img'><img src='geom_contour-8.png' alt='' width='700' height='433' /></div><div class='input'><span class='no'>v</span> + <span class='fu'><a href='geom_tile.html'>geom_raster</a></span>(<span class='fu'><a href='aes.html'>aes</a></span>(<span class='kw'>fill</span> <span class='kw'>=</span> <span class='no'>density</span>)) +
-  <span class='fu'>geom_contour</span>(<span class='kw'>colour</span> <span class='kw'>=</span> <span class='st'>"white"</span>)</div><div class='img'><img src='geom_contour-9.png' alt='' width='700' height='433' /></div></pre>
+<span class='va'>v</span> <span class='op'>+</span> <span class='fu'>geom_contour</span><span class='op'>(</span><span class='fu'><a href='aes.html'>aes</a></span><span class='op'>(</span>colour <span class='op'>=</span> <span class='fu'><a href='aes_eval.html'>after_stat</a></span><span class='op'>(</span><span class='va'>level</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
+</div><div class='img'><img src='geom_contour-8.png' alt='' width='700' height='433' /></div><div class='input'><span class='va'>v</span> <span class='op'>+</span> <span class='fu'>geom_contour</span><span class='op'>(</span>colour <span class='op'>=</span> <span class='st'>"red"</span><span class='op'>)</span>
+</div><div class='img'><img src='geom_contour-9.png' alt='' width='700' height='433' /></div><div class='input'><span class='va'>v</span> <span class='op'>+</span> <span class='fu'><a href='geom_raster.html'>geom_raster</a></span><span class='op'>(</span><span class='fu'><a href='aes.html'>aes</a></span><span class='op'>(</span>fill <span class='op'>=</span> <span class='va'>density</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'>geom_contour</span><span class='op'>(</span>colour <span class='op'>=</span> <span class='st'>"white"</span><span class='op'>)</span>
+</div><div class='img'><img src='geom_contour-10.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='co'># Irregular data</span>
+<span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/ns-load.html'>requireNamespace</a></span><span class='op'>(</span><span class='st'>"interp"</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
+  <span class='co'># Use a dataset from the interp package</span>
+  <span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>franke</span>, package <span class='op'>=</span> <span class='st'>"interp"</span><span class='op'>)</span>
+  <span class='va'>origdata</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/as.data.frame.html'>as.data.frame</a></span><span class='op'>(</span><span class='fu'>interp</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/interp/man/franke.data.html'>franke.data</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>1</span>, <span class='va'>franke</span><span class='op'>)</span><span class='op'>)</span>
+  <span class='va'>grid</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/with.html'>with</a></span><span class='op'>(</span><span class='va'>origdata</span>, <span class='fu'>interp</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/interp/man/interp.html'>interp</a></span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>y</span>, <span class='va'>z</span><span class='op'>)</span><span class='op'>)</span>
+  <span class='va'>griddf</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/subset.html'>subset</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>x <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='va'>grid</span><span class='op'>$</span><span class='va'>x</span>, <span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span><span class='op'>(</span><span class='va'>grid</span><span class='op'>$</span><span class='va'>z</span><span class='op'>)</span><span class='op'>)</span>,
+                              y <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='va'>grid</span><span class='op'>$</span><span class='va'>y</span>, each <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>ncol</a></span><span class='op'>(</span><span class='va'>grid</span><span class='op'>$</span><span class='va'>z</span><span class='op'>)</span><span class='op'>)</span>,
+                              z <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/numeric.html'>as.numeric</a></span><span class='op'>(</span><span class='va'>grid</span><span class='op'>$</span><span class='va'>z</span><span class='op'>)</span><span class='op'>)</span>,
+                   <span class='op'>!</span><span class='fu'><a href='https://rdrr.io/r/base/NA.html'>is.na</a></span><span class='op'>(</span><span class='va'>z</span><span class='op'>)</span><span class='op'>)</span>
+  <span class='fu'><a href='ggplot.html'>ggplot</a></span><span class='op'>(</span><span class='va'>griddf</span>, <span class='fu'><a href='aes.html'>aes</a></span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>y</span>, z <span class='op'>=</span> <span class='va'>z</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
+    <span class='fu'>geom_contour_filled</span><span class='op'>(</span><span class='op'>)</span> <span class='op'>+</span>
+    <span class='fu'><a href='geom_point.html'>geom_point</a></span><span class='op'>(</span>data <span class='op'>=</span> <span class='va'>origdata</span><span class='op'>)</span>
+<span class='op'>}</span> <span class='kw'>else</span>
+  <span class='fu'><a href='https://rdrr.io/r/base/message.html'>message</a></span><span class='op'>(</span><span class='st'>"Irregular data requires the 'interp' package"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'>Loading required namespace: interp</span></div><div class='img'><img src='geom_contour-11.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># }</span>
+</div></pre>
   </div>
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
-      
-      <li><a href="#aesthetics">Aesthetics</a></li>
-
-      <li><a href="#computed-variables">Computed variables</a></li>
-
-      <li><a href="#see-also">See also</a></li>
-      
-      <li><a href="#examples">Examples</a></li>
-    </ul>
-
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 </div>
+
 
       <footer>
       <div class="tidyverse">
@@ -328,15 +528,35 @@ the default plot specification, e.g. <code><a href='borders.html'>borders()</a><
 
 <div class="author">
   <p>
-    Developed by <a href='http://hadley.nz'>Hadley Wickham</a>, Winston Chang, Lionel Henry, Thomas Lin Pedersen, Kohske Takahashi, Claus Wilke, Kara Woo, Hiroaki Yutani.
+    Developed by <a href='http://hadley.nz'>Hadley Wickham</a>, <a href='https://github.com/wch'>Winston Chang</a>, <a href='https://github.com/lionel-'>Lionel Henry</a>, <a href='https://data-imaginist.com'>Thomas Lin Pedersen</a>, Kohske Takahashi, <a href='https://clauswilke.com'>Claus Wilke</a>, <a href='https://karawoo.com'>Kara Woo</a>, <a href='https://yutani.rbind.io'>Hiroaki Yutani</a>, <a href='https://fishandwhistle.net'>Dewey Dunnington</a>, <a href='https://www.rstudio.com'><img src='https://www.tidyverse.org/rstudio-logo.svg' alt='RStudio' height='24' /></a>.
     Site built by <a href="https://pkgdown.r-lib.org">pkgdown</a>.
   </p>
 </div>
+
       </footer>
    </div>
 
   
+<script src="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.1/docsearch.min.js" integrity="sha256-GKvGqXDznoRYHCwKXGnuchvKSwmx9SRMrZOTh2g4Sb0=" crossorigin="anonymous"></script>
+<script>
+  docsearch({
+    
+    
+    apiKey: 'e1261f3df95d2d4704c626ff11a4b536',
+    indexName: 'tidyverse_ggplot2',
+    inputSelector: 'input#search-input.form-control',
+    transformData: function(hits) {
+      return hits.map(function (hit) {
+        hit.url = updateHitURL(hit);
+        return hit;
+      });
+    }
+  });
+</script>
+
+
 
   </body>
 </html>
+
 
